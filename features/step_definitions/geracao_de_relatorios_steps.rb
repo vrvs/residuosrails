@@ -37,7 +37,7 @@ Then(/^o valor retornado pelo sistema será "([^"]*)"kg$/) do |res_weight|
   expect(@value_test).to eq(res_weight.to_f())
 end
 
-Given(/^o sistema possui "([^"]*)" kg de residuos cadastrados entre entre as datas "([^"]*)" e "([^"]*)" para o laboratorio de "([^"]*)"$/) do |res_weight, data_begin, data_final, lab_name|
+Given(/^o sistema possui "([^"]*)" kg de resíduos cadastrados entre entre as datas "([^"]*)" e "([^"]*)" para o laboratorio de "([^"]*)"$/) do |res_weight, data_begin, data_final, lab_name|
   lab = Laboratory.find_by(name: lab_name)
 	expect(lab).to_not be nil
 	res = Residue.find_by(name:"Acido", laboratory_id: lab.id)
