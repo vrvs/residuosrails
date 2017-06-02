@@ -8,7 +8,7 @@ Given(/^existe "([^"]*)" kg de residuos cadastrados no sistema$/) do |res_weight
  expect(lab).to_not be nil
  res = cad_res("Etanol",lab.id,"Líquido Inflamável")
  expect(res).to_not be nil
- reg = cad_reg(res_weight.to_f(),res.id,col.id)
+ reg = cad_reg(res_weight.to_f(),res.id)
  expect(reg).to_not be nil
 end
  
@@ -67,12 +67,11 @@ def cad_res(res_name, lab_id,res_type)
  return Residue.find_by(name: res_name)
 end
 
-def cad_reg(weight, res_id, col_id)
- reg = {register: {weight: weight.to_f(), residue_id: res_id, collection_id: col_id}}
- post '/update_weight', reg
- return Register.find_by(weight: weight.to_f())
+def cad_reg(weight, res_id)
+ reg = {register: {weight: weight.to_f(), residue_id: res_id}}
+ post '/registers', reg
+ return Register.find_by(residue_id: res_id)
 end
-
 
 Given(/^existe "([^"]*)" kg de "([^"]*)" de tipo "([^"]*)" cadastrado no sistema$/) do |res_weight, res_name, res_type|
  col = cad_col(0)
@@ -85,13 +84,12 @@ Given(/^existe "([^"]*)" kg de "([^"]*)" de tipo "([^"]*)" cadastrado no sistema
  expect(res).to_not be nil
  reg = cad_reg(res_weight.to_f(),res.id)
  expect(reg).to_not be nil
- 
 end
  
 When(/^eu tento gerar o "([^"]*)"$/) do |action|
  if action == "Total de Resíduos Acumulados por Tipo"
-     @collection = Collection.last
-     @collection.type_residue
+  @collection = Collection.last
+  @collection.type_residue
  end
 end
 
