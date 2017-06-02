@@ -25,9 +25,10 @@ When(/^eu tento produzir o relatório total de resíduos cadastrados entre as da
   dep = (Department.find_by(name: dep_name))
   expect(dep).to_not be nil
   value_total = 0
-  Laboratory.where(department_id: dep.id).each do |it|
-      p it.total_lab  
-      value_total = value_total + it.total_lab.to_f()
+  lab =  Laboratory.where(department_id: dep.id)
+  lab.each do |it|
+      res = Residue.where(laboratory_id: it.id)
+      value_total = value_total + sum_registers(res,data_begin,data_final)
   end
   p value_total
   
@@ -38,26 +39,23 @@ Then(/^o valor retornado pelo sistema será "([^"]*)"kg$/) do |res_weight|
 end
 
 Given(/^o sistema possui "([^"]*)" kg de resíduos cadastrados entre entre as datas "([^"]*)" e "([^"]*)" para o laboratorio de "([^"]*)"$/) do |res_weight, data_begin, data_final, lab_name|
-  lab = Laboratory.find_by(name: lab_name)
+    lab = Laboratory.find_by(name: lab_name)
 	expect(lab).to_not be nil
 	res = Residue.find_by(name:"Acido", laboratory_id: lab.id)
 	if(res != nil) then
-	  reg = {register: {weight: res_weight.to_f(), residue_id: res.id}}
+	  reg =createRegister({register: {weight: res_weight.to_f(), residue_id: res.id}})
   else
     res = createResidue({residue: {name:"Acido", laboratory_id: lab.id}})
-    modifyDateLastRegister(res_id,data_begin.to_date)
-    put_date(res,data_begin.to_date)
-    reg = {register: {weight: res_weight.to_f(), residue_id: res.id}}
+    reg = createRegister({register: {weight: res_weight.to_f(), residue_id: res.id}})
+    modifyDateLastRegister(res.id,data_begin)
   end
 	expect(res).to_not be nil
-	post '/update_weight', reg
-
-	modifyDateLastRegister(res_id,data_begin.to_date)
+	modifyDateLastRegister(res.id,data_begin)
 	res = Residue.where(laboratory_id: lab.id)
-  expect(res).to_not be nil
+    expect(res).to_not be nil
 	sum_registers(res,data_begin,data_final)
-  expect(@value_test).to eq(res_weight.to_f())
-  p res.total.eql?(res_weight)
+    expect(sum_registers(res,data_begin,data_final)).to eq(res_weight.to_f())
+   
 
 end
 
@@ -124,15 +122,14 @@ end
 
 
 def sum_registers(res,data_begin,data_final)
-     residues_total_in_data = 0
+   residues_total_in_data = 0
      res.each do |it|
-	    rList = it.registers.where(created_at: [data_begin.to_date..data_final.to_date])
+	    rList = it.registers.where(created_at:[data_begin.to_date..data_final.to_date])
+	    
       expect(rList).to_not be nil
-      r = rList.order(:created_at)
-     
-      residues_total_in_data = residues_total_in_data + (rList.last.weight - rList.first.weight)
+      residues_total_in_data = residues_total_in_data + rList.sum(:weight)
     end
-   residues_total_in_data
+     residues_total_in_data
 end
   
 
@@ -161,6 +158,5 @@ def modifyDateLastRegister(res_id, date)
   reg = Residue.find(res_id).registers.last
   reg.created_at = date.to_date
   reg.save
-  reg
 end
 
