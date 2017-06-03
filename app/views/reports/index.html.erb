@@ -5,7 +5,7 @@
 <table>
   <thead>
     <tr>
-      <th>Group by</th>
+      <th>Generate by</th>
       <th>Begin dt</th>
       <th>End dt</th>
       <th>Unit</th>
@@ -23,7 +23,7 @@
   <tbody>
     <% @reports.each do |report| %>
       <tr>
-        <td><%= report.group_by %></td>
+        <td><%= report.generate_by %></td>
         <td><%= report.begin_dt %></td>
         <td><%= report.end_dt %></td>
         <td><%= report.unit %></td>

@@ -24,8 +24,9 @@ class ReportsController < ApplicationController
   # POST /reports
   # POST /reports.json
   def create
+    p report_params
     @report = Report.new(report_params)
-
+    
     respond_to do |format|
       if @report.save
         format.html { redirect_to @report, notice: 'Report was successfully created.' }
@@ -69,6 +70,6 @@ class ReportsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def report_params
-      params.require(:report).permit(:group_by, :begin_dt, :end_dt, :unit, :state, :kind, :onu, :blend, :code, :total, :collection_id)
+      params.require(:report).permit(:generate_by, :begin_dt, :end_dt, :unit, :state, :kind, :onu, :blend, :code, :total, :collection_id, list: [])
     end
 end
