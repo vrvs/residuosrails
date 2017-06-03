@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170602024016) do
+ActiveRecord::Schema.define(version: 20170602205115) do
 
   create_table "collections", force: :cascade do |t|
     t.float    "max_value"
@@ -71,7 +71,7 @@ ActiveRecord::Schema.define(version: 20170602024016) do
   end
 
   create_table "reports", force: :cascade do |t|
-    t.integer  "group_by"
+    t.integer  "generate_by"
     t.datetime "begin_dt"
     t.datetime "end_dt"
     t.boolean  "unit"

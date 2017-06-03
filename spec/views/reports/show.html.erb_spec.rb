@@ -3,14 +3,14 @@ require 'rails_helper'
 RSpec.describe "reports/show", type: :view do
   before(:each) do
     @report = assign(:report, Report.create!(
-      :group_by => 2,
+      :generate_by => 2,
       :unit => false,
       :state => false,
       :kind => false,
       :onu => false,
       :blend => false,
       :code => false,
-      :total => "",
+      :total => false,
       :collection => nil
     ))
   end
@@ -24,7 +24,7 @@ RSpec.describe "reports/show", type: :view do
     expect(rendered).to match(/false/)
     expect(rendered).to match(/false/)
     expect(rendered).to match(/false/)
-    expect(rendered).to match(//)
+    expect(rendered).to match(/false/)
     expect(rendered).to match(//)
   end
 end

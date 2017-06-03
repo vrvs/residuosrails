@@ -68,19 +68,28 @@ Given(/^o sistema possui o departamento de "([^"]*)" cadastrado com o resíduo "
   expect(lab).to_not be nil
   res = createResidue({residue: {name: res_name, laboratory_id: lab.id}})
   expect(res).to_not be nil
-  reg = updateWeight({register: {weight: res_total.to_f(), residue_id: res.id, departement_id: dep.id, laboratory_id: lab.id}})
+  reg = createRegister({register: {weight: res_total.to_f(), residue_id: res.id}})
   expect(reg.weight).to eq(res_total.to_f())
 end
 
-When(/^eu tento gerar um relatório dos resíduos dos departamentos de "([^"]*)", "([^"]*)" e "([^"]*)"$/) do |arg1, arg2, arg3|
-  rep = {report: {generate_by: 1, begin_date: "01/01/2001".to_date, end_date: "29/12/2029".to_date, f_unit: false, f_state: false, f_kind: false, f_onu: false, f_blend: false, f_code: false, f_total: true}}
+When(/^eu tento gerar um relatório dos resíduos dos departamentos de "([^"]*)", "([^"]*)" e "([^"]*)"$/) do |dep1, dep2, dep3|
+  dep1_id = Department.find_by(name: dep1).id
+  dep2_id = Department.find_by(name: dep2).id
+  dep3_id = Department.find_by(name: dep3).id
+  rep = {report: {
+    generate_by: 1, 
+    begin_date: "01/01/2001".to_date, 
+    end_date: "29/12/2029".to_date, 
+    unit: false, 
+    state: false, 
+    kind: false, 
+    onu: false, 
+    blend: false, 
+    code: false, 
+    total: true,
+    list: [dep1_id, dep2_id, dep3_id]
+  }}
   post '/reports', rep
-  repc = {reportcell: {dep_name: arg1}}
-  post '/generate_reportcell', repc
-  repc = {reportcell: {dep_name: arg2}}
-  post '/generate_reportcell', repc
-  repc = {reportcell: {dep_name: arg3}}
-  post '/generate_reportcell', repc
 end
 
 Then(/^o sistema retorna o valor de "([^"]*)"Kg para o resíduo "([^"]*)"$/) do |arg1, arg2|
