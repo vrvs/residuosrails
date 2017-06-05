@@ -24,16 +24,22 @@ class ReportsController < ApplicationController
   # POST /reports
   # POST /reports.json
   def create
-    p report_params
-    if(report_params[:list]) then
     @report = Report.new(report_params)
-  else
-    @report = Report.new(report_params.except(:list))
-  end
+    
     respond_to do |format|
       if @report.save
         format.html { redirect_to @report, notice: 'Report was successfully created.' }
         format.json { render :show, status: :created, location: @report }
+        case report_params[:generate_by].to_i
+          when 0  #relatório por coleção
+            generate_by_collection
+          when 1  #relatório por departamento
+            generate_by_department
+          when 2  #relatório por laboratórios
+            generate_by_laboratory
+          when 3 #relatório por residuos
+            generate_by_residue
+        end
       else
         format.html { render :new }
         format.json { render json: @report.errors, status: :unprocessable_entity }
@@ -64,6 +70,81 @@ class ReportsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  def generate_by_department
+    report_params[:list].each do |dep_name|
+      dep = Department.find_by(name: dep_name)
+      dep.laboratories.each do |lab|
+        lab.residues.each do |res|
+          regs = res.registers.where(created_at: [report_params[:begin_dt]..report_params[:end_dt]]).order(:created_at)
+          add_registers(regs)
+          repc = nil
+          Reportcell.where(res_name: res.name, dep_name: dep_name).each do |rep_cell|
+            if res.name == rep_cell.res_name then
+              repc = rep_cell
+              break
+            end
+          end
+          if repc == nil then
+            repc = Reportcell.create(dep_name: dep_name, res_name: res.name, total: 0, report_id: @report.id)
+          end
+          add_constraint(repc, res, regs.sum(:weight))
+        end
+      end
+    end
+  end
+  
+  def generate_by_laboratory
+    report_params[:list].each do |lab_name|
+      lab = Laboratory.find_by(name: lab_name)
+      lab.residues.each do |res|
+        regs = res.registers.where(created_at: [report_params[:begin_dt]..report_params[:end_dt]]).order(:created_at)
+        add_registers(regs)
+        repc = Reportcell.create(lab_name: lab_name, res_name: res.name, total: 0, report_id: @report.id)
+        add_constraint(repc, res, regs.sum(:weight))
+      end
+    end
+  end
+  
+  def generate_by_residue
+    report_params[:list].each do |res_name|
+      Residue.where(name: res_name).each do |res|
+        regs = res.registers.where(created_at: [report_params[:begin_dt]..report_params[:end_dt]]).order(:created_at)
+        add_registers(regs)
+        repc = nil
+        Reportcell.where(res_name: res_name).each do |rep_cell|
+          if res.name == rep_cell.res_name then
+            repc = rep_cell
+            break
+          end
+        end
+        if repc == nil then
+          repc = Reportcell.create(res_name: res.name, total: 0, report_id: @report.id)
+        end
+        add_constraint(repc, res, regs.sum(:weight))
+      end
+    end
+  end
+  
+  def add_registers(regs)
+    regs.each do |reg|
+      @report.registers.create(weight: reg.weight)
+      last_reg = @report.registers.last
+      last_reg.created_at = reg.created_at
+      last_reg.save
+    end
+  end
+  
+  def add_constraint(repc, res, total)
+    repc.blend = (@report.blend ? res.blend : nil)
+    repc.code = (@report.code ? res.code : nil)
+    repc.kind = (@report.kind ? res.kind : nil) 
+    repc.onu = (@report.onu ? res.onu : nil)
+    repc.state = (@report.state ? res.kind[0] : nil)
+    repc.unit = (@report.unit ? "Kg" : nil)
+    repc.total = (@report.total ? repc.total + total : nil)
+    repc.save
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -76,3 +157,6 @@ class ReportsController < ApplicationController
       params.require(:report).permit(:generate_by, :begin_dt, :end_dt, :unit, :state, :kind, :onu, :blend, :code, :total, :collection_id, list: [])
     end
 end
+
+
+
