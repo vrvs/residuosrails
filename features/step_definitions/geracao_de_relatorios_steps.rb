@@ -73,13 +73,10 @@ Given(/^o sistema possui o departamento de "([^"]*)" cadastrado com o resíduo "
 end
 
 When(/^eu tento gerar um relatório dos resíduos dos departamentos de "([^"]*)", "([^"]*)" e "([^"]*)"$/) do |dep1, dep2, dep3|
-  dep1_id = Department.find_by(name: dep1).id
-  dep2_id = Department.find_by(name: dep2).id
-  dep3_id = Department.find_by(name: dep3).id
   rep = {report: {
     generate_by: 1, 
-    begin_date: "01/01/2001".to_date, 
-    end_date: "29/12/2029".to_date, 
+    begin_dt: "01/01/2001".to_date, 
+    end_dt: "29/12/2029".to_date, 
     unit: false, 
     state: false, 
     kind: false, 
@@ -87,8 +84,8 @@ When(/^eu tento gerar um relatório dos resíduos dos departamentos de "([^"]*)"
     blend: false, 
     code: false, 
     total: true,
-    list: [dep1_id, dep2_id, dep3_id]
-  }}
+    list: [dep1, dep2, dep3]}
+  }
   post '/reports', rep
 end
 
