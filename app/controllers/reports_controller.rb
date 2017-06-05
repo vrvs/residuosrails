@@ -25,8 +25,11 @@ class ReportsController < ApplicationController
   # POST /reports.json
   def create
     p report_params
+    if(report_params[:list]) then
     @report = Report.new(report_params)
-    
+  else
+    @report = Report.new(report_params.except(:list))
+  end
     respond_to do |format|
       if @report.save
         format.html { redirect_to @report, notice: 'Report was successfully created.' }
