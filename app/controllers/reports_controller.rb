@@ -40,6 +40,7 @@ class ReportsController < ApplicationController
           when 3 #relatório por residuos
             generate_by_residue
         end
+        
       else
         format.html { render :new }
         format.json { render json: @report.errors, status: :unprocessable_entity }
@@ -76,19 +77,11 @@ class ReportsController < ApplicationController
       dep = Department.find_by(name: dep_name)
       dep.laboratories.each do |lab|
         lab.residues.each do |res|
-          regs = res.registers.where(created_at: [report_params[:begin_dt]..report_params[:end_dt]]).order(:created_at)
-          add_registers(regs)
-          repc = nil
-          Reportcell.where(res_name: res.name, dep_name: dep_name).each do |rep_cell|
-            if res.name == rep_cell.res_name then
-              repc = rep_cell
-              break
-            end
-          end
+          repc = get_similar_reportcell(Reportcell.where(res_name: res.name, dep_name: dep_name))
           if repc == nil then
             repc = Reportcell.create(dep_name: dep_name, res_name: res.name, total: 0, report_id: @report.id)
           end
-          add_constraint(repc, res, regs.sum(:weight))
+          add_constraint(repc, res, add_registers(res).sum(:weight))
         end
       end
     end
@@ -98,10 +91,8 @@ class ReportsController < ApplicationController
     report_params[:list].each do |lab_name|
       lab = Laboratory.find_by(name: lab_name)
       lab.residues.each do |res|
-        regs = res.registers.where(created_at: [report_params[:begin_dt]..report_params[:end_dt]]).order(:created_at)
-        add_registers(regs)
         repc = Reportcell.create(lab_name: lab_name, res_name: res.name, total: 0, report_id: @report.id)
-        add_constraint(repc, res, regs.sum(:weight))
+        add_constraint(repc, res, add_registers(res).sum(:weight))
       end
     end
   end
@@ -109,30 +100,35 @@ class ReportsController < ApplicationController
   def generate_by_residue
     report_params[:list].each do |res_name|
       Residue.where(name: res_name).each do |res|
-        regs = res.registers.where(created_at: [report_params[:begin_dt]..report_params[:end_dt]]).order(:created_at)
-        add_registers(regs)
-        repc = nil
-        Reportcell.where(res_name: res_name).each do |rep_cell|
-          if res.name == rep_cell.res_name then
-            repc = rep_cell
-            break
-          end
-        end
+        repc = get_similar_reportcell(Reportcell.where(res_name: res_name))
         if repc == nil then
           repc = Reportcell.create(res_name: res.name, total: 0, report_id: @report.id)
         end
-        add_constraint(repc, res, regs.sum(:weight))
+        add_constraint(repc, res, add_registers(res).sum(:weight))
       end
     end
   end
   
-  def add_registers(regs)
+  def get_similar_reportcell(list)
+    repc = nil
+    list.each do |rep_cell|
+      if res.name == rep_cell.res_name then
+        repc = rep_cell
+        break
+      end
+    end
+    repc
+  end
+  
+  def add_registers(res)
+    regs = res.registers.where(created_at: [report_params[:begin_dt]..report_params[:end_dt]]).order(:created_at)
     regs.each do |reg|
       @report.registers.create(weight: reg.weight)
       last_reg = @report.registers.last
       last_reg.created_at = reg.created_at
       last_reg.save
     end
+    regs
   end
   
   def add_constraint(repc, res, total)
@@ -157,6 +153,3 @@ class ReportsController < ApplicationController
       params.require(:report).permit(:generate_by, :begin_dt, :end_dt, :unit, :state, :kind, :onu, :blend, :code, :total, :collection_id, list: [])
     end
 end
-
-
-
