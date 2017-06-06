@@ -12,7 +12,7 @@ class Residue < ApplicationRecord
     end
     return total
   end
-    
+  
   def total_res
     self.registers.sum(:weight)
   end
