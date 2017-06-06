@@ -74,12 +74,19 @@ def cad_reg(weight, res_id)
 end
 
 Given(/^existe "([^"]*)" kg de "([^"]*)" de tipo "([^"]*)" cadastrado no sistema$/) do |res_weight, res_name, res_type|
- col = cad_col(0)
- expect(col).to_not be nil
- dep = cad_dep("Departamento de Genetica")
- expect(dep).to_not be nil
- lab = cad_lab("Laboratorio de Genetica Aplicada", dep.id)
- expect(lab).to_not be nil
+ if Collection.all.empty?
+  col = cad_col(7500) 
+  expect(col).to_not be nil
+ end
+ if Department.all.empty? 
+  dep = cad_dep("Departamento de Genetica")
+  expect(dep).to_not be nil
+ end
+ if Laboratory.all.empty?
+  lab = cad_lab("Laboratorio de Genetica Aplicada", dep.id)
+  expect(lab).to_not be nil
+ end
+ lab = Laboratory.find_by(name: "Laboratorio de Genetica Aplicada")
  res = cad_res(res_name,lab.id,res_type)
  expect(res).to_not be nil
  reg = cad_reg(res_weight.to_f(),res.id)
