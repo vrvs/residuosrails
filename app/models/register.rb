@@ -7,5 +7,4 @@ class Register < ApplicationRecord
   def total_reg
     self.sum(:weight)
   end
-
 end

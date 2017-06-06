@@ -157,3 +157,6 @@ class ReportsController < ApplicationController
       params.require(:report).permit(:generate_by, :begin_dt, :end_dt, :unit, :state, :kind, :onu, :blend, :code, :total, :collection_id, list: [])
     end
 end
+
+
+
