@@ -1,3 +1,4 @@
+@dep_name = ""
 Given(/^o sistema possui o departamento de "([^"]*)" cadastrado$/) do |dep_name|
   dep = createDepartment({department: {name: dep_name}})
   expect(dep).to_not be nil
@@ -21,21 +22,30 @@ Given(/^o sistema possui "([^"]*)"kg de resíduos cadastrados no laboratório de
   end
 
 When(/^eu tento produzir o relatório total de resíduos cadastrados entre as datas "([^"]*)" e "([^"]*)" para o departamento de "([^"]*)"$/) do |data_begin, data_final, dep_name|
- 
-  dep = (Department.find_by(name: dep_name))
-  expect(dep).to_not be nil
-  value_total = 0
-  lab =  Laboratory.where(department_id: dep.id)
-  lab.each do |it|
-      res = Residue.where(laboratory_id: it.id)
-      value_total = value_total + sum_registers(res,data_begin,data_final)
-  end
-  p value_total
-  
+    @dep_name = dep_name
+  rep = {report: {
+    generate_by: 1, 
+    begin_dt: data_begin.to_date, 
+    end_dt: data_final.to_date, 
+    unit: false, 
+    state: false, 
+    kind: false, 
+    onu: false, 
+    blend: false, 
+    code: false, 
+    total: true,
+    list: [dep_name]}
+  }
+  post '/reports', rep
   end
 
 Then(/^o valor retornado pelo sistema será "([^"]*)"kg$/) do |res_weight|
-  expect(@value_test).to eq(res_weight.to_f())
+  repc = Reportcell.where(dep_name: @dep_name)
+  total = 0
+  repc.each do |it|
+    total += it.total
+  end
+  expect(total).to eq(res_weight.to_f())
 end
 
 Given(/^o sistema possui "([^"]*)" kg de resíduos cadastrados entre entre as datas "([^"]*)" e "([^"]*)" para o laboratorio de "([^"]*)"$/) do |res_weight, data_begin, data_final, lab_name|

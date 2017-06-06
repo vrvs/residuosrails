@@ -4,5 +4,7 @@ class Register < ApplicationRecord
   
   validates :weight, presence: true
   
-
+  def total_reg
+    self.sum(:weight)
+  end
 end
