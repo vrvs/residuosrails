@@ -53,20 +53,18 @@ Given(/^o sistema possui "([^"]*)" kg de resíduos cadastrados entre entre as da
 	expect(lab).to_not be nil
 	res = Residue.find_by(name:"Acido", laboratory_id: lab.id)
 	if(res != nil) then
-	  reg =createRegister({register: {weight: res_weight.to_f(), residue_id: res.id}})
+	  reg =create_register({register: {weight: res_weight.to_f(), residue_id: res.id}})
   else
-    res = createResidue({residue: {name:"Acido", laboratory_id: lab.id}})
-    reg = createRegister({register: {weight: res_weight.to_f(), residue_id: res.id}})
-    modifyDateLastRegister(res.id,data_begin)
+    res = create_residue({residue: {name:"Acido", laboratory_id: lab.id}})
+    reg = create_register({register: {weight: res_weight.to_f(), residue_id: res.id}})
+    modify_date_last_register(res.id,data_begin)
   end
 	expect(res).to_not be nil
-	modifyDateLastRegister(res.id,data_begin)
+	modify_date_last_register(res.id,data_begin)
 	res = Residue.where(laboratory_id: lab.id)
-    expect(res).to_not be nil
+  expect(res).to_not be nil
 	sum_registers(res,data_begin,data_final)
-    expect(sum_registers(res,data_begin,data_final)).to eq(res_weight.to_f())
-   
-
+  expect(sum_registers(res,data_begin,data_final)).to eq(res_weight.to_f())
 end
 
 Given(/^o sistema possui o departamento de "([^"]*)" cadastrado com o resíduo "([^"]*)" com quantidade total de "([^"]*)"Kg$/) do |dep_name, res_name, res_total|
@@ -140,6 +138,17 @@ Then(/^o sistema retorna as informações "([^"]*)" e "([^"]*)"Kg para o resídu
   end
   expect(total).to eq(quant.to_f())
   expect(repc[0].kind).to eq (kind)
+end
+
+def sum_registers(res,data_begin,data_final)
+   residues_total_in_data = 0
+     res.each do |it|
+	    rList = it.registers.where(created_at:[data_begin.to_date..data_final.to_date])
+	    
+      expect(rList).to_not be nil
+      residues_total_in_data = residues_total_in_data + rList.sum(:weight)
+    end
+     residues_total_in_data
 end
 
 def create_department(dep)
