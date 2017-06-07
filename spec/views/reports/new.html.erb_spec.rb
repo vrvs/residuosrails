@@ -3,14 +3,14 @@ require 'rails_helper'
 RSpec.describe "reports/new", type: :view do
   before(:each) do
     assign(:report, Report.new(
-      :group_by => 1,
+      :generate_by => 1,
       :unit => false,
       :state => false,
       :kind => false,
       :onu => false,
       :blend => false,
       :code => false,
-      :total => "",
+      :total => false,
       :collection => nil
     ))
   end
@@ -20,7 +20,7 @@ RSpec.describe "reports/new", type: :view do
 
     assert_select "form[action=?][method=?]", reports_path, "post" do
 
-      assert_select "input#report_group_by[name=?]", "report[group_by]"
+      assert_select "input#report_generate_by[name=?]", "report[generate_by]"
 
       assert_select "input#report_unit[name=?]", "report[unit]"
 

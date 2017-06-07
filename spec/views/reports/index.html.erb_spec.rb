@@ -4,25 +4,25 @@ RSpec.describe "reports/index", type: :view do
   before(:each) do
     assign(:reports, [
       Report.create!(
-        :group_by => 2,
+        :generate_by => 2,
         :unit => false,
         :state => false,
         :kind => false,
         :onu => false,
         :blend => false,
         :code => false,
-        :total => "",
+        :total => false,
         :collection => nil
       ),
       Report.create!(
-        :group_by => 2,
+        :generate_by => 2,
         :unit => false,
         :state => false,
         :kind => false,
         :onu => false,
         :blend => false,
         :code => false,
-        :total => "",
+        :total => false,
         :collection => nil
       )
     ])
@@ -37,7 +37,7 @@ RSpec.describe "reports/index", type: :view do
     assert_select "tr>td", :text => false.to_s, :count => 2
     assert_select "tr>td", :text => false.to_s, :count => 2
     assert_select "tr>td", :text => false.to_s, :count => 2
-    assert_select "tr>td", :text => "".to_s, :count => 2
+    assert_select "tr>td", :text => false.to_s, :count => 2
     assert_select "tr>td", :text => nil.to_s, :count => 2
   end
 end

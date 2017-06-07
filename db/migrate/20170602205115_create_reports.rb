@@ -1,7 +1,7 @@
 class CreateReports < ActiveRecord::Migration[5.0]
   def change
     create_table :reports do |t|
-      t.integer :group_by
+      t.integer :generate_by
       t.datetime :begin_dt
       t.datetime :end_dt
       t.boolean :unit
@@ -11,7 +11,7 @@ class CreateReports < ActiveRecord::Migration[5.0]
       t.boolean :blend
       t.boolean :code
       t.boolean :total
-      t.belongs_to :collection, foreign_key: true
+      t.belongs_to :collection, index: true, foreign_key: true
 
       t.timestamps
     end

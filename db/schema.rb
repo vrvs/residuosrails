@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170602024016) do
+ActiveRecord::Schema.define(version: 20170605210222) do
 
   create_table "collections", force: :cascade do |t|
     t.float    "max_value"
@@ -48,8 +48,10 @@ ActiveRecord::Schema.define(version: 20170602024016) do
   create_table "registers", force: :cascade do |t|
     t.float    "weight"
     t.integer  "residue_id"
+    t.integer  "report_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["report_id"], name: "index_registers_on_report_id"
     t.index ["residue_id"], name: "index_registers_on_residue_id"
   end
 
@@ -71,7 +73,7 @@ ActiveRecord::Schema.define(version: 20170602024016) do
   end
 
   create_table "reports", force: :cascade do |t|
-    t.integer  "group_by"
+    t.integer  "generate_by"
     t.datetime "begin_dt"
     t.datetime "end_dt"
     t.boolean  "unit"
