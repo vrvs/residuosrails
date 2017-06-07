@@ -13,7 +13,7 @@
 
   <div class="field">
     <%= f.label :generate_by %>
-    <%= f.number_field :generate_by %>
+    <%= f.select :generate_by, options_for_select(["Departamento", "Laboratório", "Residuo"]) %>
   </div>
 
   <div class="field">

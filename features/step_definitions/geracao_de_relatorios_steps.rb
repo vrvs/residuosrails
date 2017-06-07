@@ -139,6 +139,59 @@ Then(/^o sistema retorna as informações "([^"]*)" e "([^"]*)"Kg para o resídu
   expect(total).to eq(quant.to_f())
   expect(repc[0].kind).to eq (kind)
 end
+##################################################GUI######################################################################
+
+Given(/^que estou na página Geração de Relatórios/) do
+  visit '/reports/new'
+end
+
+Given(/^a opção de gerar por "([^"]*)" está selecionada$/) do |arg1|
+  #select 'arg1', from: :generate_by
+  page.select 'arg1', :from => 'generate_by'
+  
+end
+
+Given(/^eu vejo uma lista de "([^"]*)" disponíveis no sistema\.$/) do |arg1|
+  if arg1 == "Departamentos" then
+    dep = create_department({department: {name: "Departamento de Engenharia Química"}})
+    lab = create_laboratory({laboratory: {name: "Laboratório de Processos Químicos", department_id: dep.id}})
+    res = create_residue({residue: {name: "Hidróxido de Amônio",laboratory_id: lab.id}})
+    reg = create_register({register: {weight: 175.to_f(), residue_id: res.id}})
+    res = create_residue({residue: {name: "Sulfato de Amônio",laboratory_id: lab.id}})
+    reg = create_register({register: {weight: 100.to_f(), residue_id: res.id}})
+    
+    dep = create_department({department: {name: "Departamento de Física"}})
+    lab = create_laboratory({laboratory: {name: "Laboratório de Análises", department_id: dep.id}})
+    
+
+    
+    
+    
+end
+
+Given(/^eu seleciono o "([^"]*)"$/) do |arg1|
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Given(/^no campo  "([^"]*)" eu vejo "([^"]*)" para início  e "([^"]*)" para final\.$/) do |arg1, arg2, arg3|
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+When(/^eu peço para "([^"]*)"$/) do |arg1|
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+When(/^eu vou para a página de resumo de sistema$/) do
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Then(/^eu devo visualizar a quantidade de resíduos produzidos, associado ao "([^"]*)" entre as datas  "([^"]*)" e  "([^"]*)"$/) do |arg1, arg2, arg3|
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+
+
+
 
 def sum_registers(res,data_begin,data_final)
    residues_total_in_data = 0
