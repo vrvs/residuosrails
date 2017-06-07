@@ -152,7 +152,7 @@ Given(/^a opção de gerar por "([^"]*)" está selecionada$/) do |arg1|
 end
 
 Given(/^eu vejo uma lista de "([^"]*)" disponíveis no sistema\.$/) do |arg1|
-  if arg1 == "Departamentos" then
+ 
     dep = create_department({department: {name: "Departamento de Engenharia Química"}})
     lab = create_laboratory({laboratory: {name: "Laboratório de Processos Químicos", department_id: dep.id}})
     res = create_residue({residue: {name: "Hidróxido de Amônio",laboratory_id: lab.id}})
@@ -162,10 +162,6 @@ Given(/^eu vejo uma lista de "([^"]*)" disponíveis no sistema\.$/) do |arg1|
     
     dep = create_department({department: {name: "Departamento de Física"}})
     lab = create_laboratory({laboratory: {name: "Laboratório de Análises", department_id: dep.id}})
-    
-
-    
-    
     
 end
 

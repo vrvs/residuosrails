@@ -35,7 +35,7 @@ Feature: Geração de Relatórios
   Scenario: Produzir relatório mensal do total de resíduo(s) para um departamento específico.
     Given  que estou na página "Geração de Relatórios"
     And  opção de gerar por "Departamento" está selecionada
-    And eu vejo uma lista de "Departamento" disponíveis no sistema.
+    And eu vejo uma lista de "Departamentos" disponíveis no sistema.
     And  eu seleciono o "Departamento de Engenharia Química"
     And no campo  "Data" eu vejo "21/02/2017" para início  e "21/03/2017" para final.
     When eu peço para gerar "Gerar Relatório"
