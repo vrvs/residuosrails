@@ -139,6 +139,84 @@ Then(/^o sistema retorna as informações "([^"]*)" e "([^"]*)"Kg para o resídu
   expect(total).to eq(quant.to_f())
   expect(repc[0].kind).to eq (kind)
 end
+##################################################GUI######################################################################
+
+Given(/^que estou na página Geração de Relatórios/) do
+    dep = creat0e_department({department: {name: "Departamento de Engenharia Química"}})
+    lab = create_laboratory({laboratory: {name: "Laboratório de Processos Químicos", department_id: dep.id}})
+    res = create_residue({residue: {name: "Hidróxido de Amônio",laboratory_id: lab.id}})
+    reg = create_register({register: {weight: 175.to_f(), residue_id: res.id}})
+    res = create_residue({residue: {name: "Sulfato de Amônio",laboratory_id: lab.id}})
+    reg = create_register({register: {weight: 100.to_f(), residue_id: res.id}})
+    dep = create_department({department: {name: "Departamento de Física"}})
+    lab = create_laboratory({laboratory: {name: "Laboratório de Análises", department_id: dep.id}})
+  visit '/reports/new'
+end
+
+Given(/^a opção de gerar por "([^"]*)" está selecionada$/) do |arg1|
+    if arg1 == "Departamento" then
+      page.choose('rb1')
+       choice = 'rb1'
+    elsif arg1 == "Laboratório" then
+      page.choose('rb2')
+      choice = 'rb2'
+    elsif arg1 == "Resíduo" then
+      page.choose('rb3')
+       choice = 'rb3'
+    end
+    expect(find_field(choice)).to be_checked
+    
+ 
+      
+  
+end
+
+Given(/^eu vejo uma lista de "([^"]*)" disponíveis no sistema\.$/) do |arg1|
+     if arg1 == "Departamentos" then
+       choice = "rb1_list"
+       
+    elsif arg1 == "Laboratórios" then
+       choice = "rb2_list"
+       
+    elsif arg1 == "Resíduos" then
+       choice = "rb3_list"
+     
+    end
+    expect(page.find(:id, choice).visible?).to be true
+    
+end
+
+Given(/^eu seleciono o "([^"]*)"$/) do |arg1|
+  page.save_screenshot
+  if arg1.at(0) == 'D' then
+     choice = "rb1_list"
+    elsif arg1.at(0) == 'L' then
+     choice = "rb2_list"
+    elsif arg1.at(0) == 'R' then
+     choice = "rb3_list"
+    end
+    page.select arg1, :from => choice
+end
+
+Given(/^no campo  "([^"]*)" eu vejo "([^"]*)" para início  e "([^"]*)" para final\.$/) do |arg1, arg2, arg3|
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+When(/^eu peço para "([^"]*)"$/) do |arg1|
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+When(/^eu vou para a página de resumo de sistema$/) do
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Then(/^eu devo visualizar a quantidade de resíduos produzidos, associado ao "([^"]*)" entre as datas  "([^"]*)" e  "([^"]*)"$/) do |arg1, arg2, arg3|
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+
+
+
 
 def sum_registers(res,data_begin,data_final)
    residues_total_in_data = 0
