@@ -36,6 +36,7 @@ rescue NameError
   raise "You need to add database_cleaner to your Gemfile (in the :test group) if you wish to use it."
 end
 
+
 # You may also want to configure DatabaseCleaner to use different strategies for certain features and scenarios.
 # See the DatabaseCleaner documentation for details. Example:
 #
@@ -56,3 +57,16 @@ end
 # See https://github.com/cucumber/cucumber-rails/blob/master/features/choose_javascript_database_strategy.feature
 Cucumber::Rails::Database.javascript_strategy = :truncation
 
+require 'capybara/poltergeist'
+ 
+Capybara.default_driver = :poltergeist
+Capybara.register_driver :poltergeist do |app|
+    options = {
+        :js_errors => true,
+        :timeout => 120,
+        :debug => false,
+        :phantomjs_options => ['--load-images=no', '--disk-cache=false'],
+        :inspector => true,
+    }
+    Capybara::Poltergeist::Driver.new(app, options)
+end
