@@ -19,4 +19,6 @@ Rails.application.routes.draw do
   get '/statistic', to: 'application#statistic'
   get '/request', to: 'application#request'
   get '/account', to: 'application#account'
+  get '/types', to: 'application#types'
+  get '/residues_lack', to: 'application#residues_lack'
 end

@@ -107,6 +107,7 @@ Then(/^o sistema calcula o  "([^"]*)" com "([^"]*)" kg de substâncias de tipo "
  end
 end
 
+
 def validate(res_type, res_weight)
  case res_type
  when "Sólido Orgânico"
@@ -122,5 +123,20 @@ def validate(res_type, res_weight)
  when "Outros"
   expect(@collection.outros).to eq(res_weight.to_f())
  end
- 
 end
+
+Given(/^eu vejo a lista de "([^"]*)" vazia$/) do |arg1|
+  visit 'statistic'
+  element = find("td", text: "Lista vazia")
+  assert_text("Lista vazia")
+  p element.text
+ end
+
+ When(/^eu seleciono a opção "([^"]*)"$/) do |arg1|
+ click_on(arg1)
+  
+ end
+
+ Then(/^eu vejo uma mensagem informando que não há resíduos cadastrados$/) do
+  p find("td").text
+ end

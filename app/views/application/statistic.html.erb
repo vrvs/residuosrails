@@ -16,8 +16,8 @@
   </thead>
 
   <tbody>
-    <% if !@residues.empty? %>
-      <% @residues.each do |residue| %>
+    <% if !Residue.all.empty? %>
+      <% Residue.all.each do |residue| %>
         <tr>
           <td><%= residue.name %></td>
           <td><%= residue.kind %></td>
@@ -36,15 +36,10 @@
 <br>
 
 <body>
-  <% if !@residues.empty? %>
-    <a href="/types">
-      <button>Gerar Total de Resíduos Acumulados por Tipo</button>
-    </a>
+  <% if !Residue.all.empty? %>
+    <a href="/types">Gerar Previsão de Notificação de Coleta</a>
   <% else %>
-    <button type="button" onclick="alert('Não possui residuos cadastrados')">Gerar Total de Resíduos Acumulados por Tipo</button>
+    <a href="/types">Gerar Previsão de Notificação de Coleta</a>
   <% end %>
 </body>
 
-<body>
-   <button type="button" onclick="alert('Hello world!')">Gerar Previsão de Notificação de Coleta</button>
-</body>
