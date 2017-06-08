@@ -198,7 +198,7 @@ end
 
 Given(/^eu seleciono o "([^"]*)"$/) do |arg1|
      page.select arg1, :from => 'report_list'
-     #page.save_screenshot
+     page.save_screenshot
 end
 
 Given(/^no campo data eu vejo "([^"]*)" para início  e "([^"]*)" para final\.$/) do |arg1, arg2|
