@@ -125,18 +125,23 @@ def validate(res_type, res_weight)
  end
 end
 
-Given(/^eu vejo a lista de "([^"]*)" vazia$/) do |arg1|
+Given(/^eu estou na página de estatistica$/) do
   visit 'statistic'
+end
+
+Given(/^eu vejo a lista de "([^"]*)" vazia$/) do |arg1|
   element = find("td", text: "Lista vazia")
-  assert_text("Lista vazia")
-  p element.text
+  expect(element).to_not be nil
  end
 
  When(/^eu seleciono a opção "([^"]*)"$/) do |arg1|
  click_on(arg1)
+ #page.save_screenshot()
   
  end
 
  Then(/^eu vejo uma mensagem informando que não há resíduos cadastrados$/) do
-  p find("td").text
+  element = page.find("textarea")
+  expect(element.value).to eq("Não existe resíduos cadastrados")
+  #page.save_screenshot()
  end

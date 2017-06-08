@@ -13,7 +13,7 @@
   </thead>
 
   <tbody>
-    <% if !@residues.empty? %>
+    <% if !@residues.nil? %>
       <% @residues.each do |residue| %>
         <tr>
           <td><%= residue.name %></td>

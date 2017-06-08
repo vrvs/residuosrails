@@ -21,4 +21,6 @@ Rails.application.routes.draw do
   get '/account', to: 'application#account'
   get '/types', to: 'application#types'
   get '/residues_lack', to: 'application#residues_lack'
+  
+  post '/home_action_path', to: 'application#home'
 end
