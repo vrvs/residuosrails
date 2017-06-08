@@ -142,19 +142,23 @@ end
 ##################################################GUI######################################################################
 
 Given(/^que estou na página Geração de Relatórios/) do
+   
     dep_name = "Departamento de Engenharia Química"
     lab_name = "Laboratório de Processos Químicos"
+    res_name = "Hidróxido de Amônio"
     create_department_gui(dep_name)
     create_laboratory_gui(lab_name, dep_name)
-    #dep_name = "Departamento de Física"
-    #lab_name = "Laboratório de Análises"
+    create_residue_gui(res_name, lab_name)
+    create_register_gui(175.to_f(), res_name)
+    res_name = "Sulfato de Amônio"
+    create_residue_gui(res_name,lab_name)
+    create_register_gui(100.to_f(), res_name)
+    
+    dep_name = "Departamento de Física"
+    lab_name = "Laboratório de Análises"
     #create_department_gui(dep_name)
     #create_laboratory_gui(lab_name, dep_name)
-   
-    #res = create_residue({residue: {name: "Hidróxido de Amônio",laboratory_id: lab.id}})
-    #reg = create_register({register: {weight: 175.to_f(), residue_id: res.id}})
-    #res = create_residue({residue: {name: "Sulfato de Amônio",laboratory_id: lab.id}})
-    #reg = create_register({register: {weight: 100.to_f(), residue_id: res.id}})
+    
    
   visit '/reports/new'
 end
@@ -213,7 +217,7 @@ Given(/^no campo data eu vejo "([^"]*)" para início  e "([^"]*)" para final\.$/
   page.select mes, :from => 'report_end_dt_2i'
   dia = d.wday
   page.select dia, :from => 'report_end_dt_3i'
-  page.save_screenshot
+  
   
   
 end
@@ -229,9 +233,6 @@ end
 Then(/^eu devo visualizar a quantidade de resíduos produzidos, associado ao "([^"]*)" entre as datas  "([^"]*)" e  "([^"]*)"$/) do |arg1, arg2, arg3|
   pending # Write code here that turns the phrase above into concrete actions
 end
-
-
-
 
 
 def sum_registers(res,data_begin,data_final)
@@ -274,15 +275,49 @@ end
 def create_department_gui(arg1)
   visit '/departments/new'
   fill_in('department_name', :with => arg1)
-  click_button 'Confirm'
+  click_button 'Create Department'
+ 
 end
 
 def create_laboratory_gui(arg1, arg2)
   visit '/laboratories/new'
   fill_in('laboratory_name', :with => arg1)
   page.select arg2, :from => 'laboratory_department_id'
-  click_button 'Confirm'
+  click_button 'Create Laboratory'
+  
 end
+
+def create_residue_gui(arg1, arg2)
+  visit '/residues/new'
+  fill_in('residue_name', :with => arg1)
+  page.select arg2, :from => 'residue_laboratory_id'
+  click_button 'Create Residue'
+end
+
+def create_register_gui(arg1, arg2)
+  visit '/registers/new'
+  fill_in('register_weight', :with => arg1)
+  page.select arg2, :from => 'register_residue_id'
+  click_button 'Create Register'
+end
+
+def destroy_all
+    Department.all.each do |it|
+      it.destroy
+    end
+    Laboratory.all.each do |it|
+      it.destroy
+    end
+    Residue.all.each do |it|
+      it.destroy
+    end
+    Register.all.each do |it|
+      it.destroy
+    end
+  end
+
+  
+  
   
   
 

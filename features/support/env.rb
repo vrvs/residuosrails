@@ -31,9 +31,14 @@ ActionController::Base.allow_rescue = false
 # Remove/comment out the lines below if your app doesn't have a database.
 # For some databases (like MongoDB and CouchDB) you may need to use :truncation instead.
 begin
-  DatabaseCleaner.strategy = :transaction
+  require 'database_cleaner'
+  require 'database_cleaner/cucumber'
+  DatabaseCleaner.strategy = :truncation
 rescue NameError
   raise "You need to add database_cleaner to your Gemfile (in the :test group) if you wish to use it."
+end
+Around do |scenario, block|
+  DatabaseCleaner.cleaning(&block)
 end
 
 
@@ -69,4 +74,5 @@ Capybara.register_driver :poltergeist do |app|
         :inspector => true,
     }
     Capybara::Poltergeist::Driver.new(app, options)
+    
 end
