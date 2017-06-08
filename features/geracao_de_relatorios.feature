@@ -26,8 +26,8 @@ Feature: Geração de Relatórios
     And a opção de gerar por "Laboratório" está selecionada
     And eu vejo uma lista de "Laboratórios" disponíveis no sistema.
     And  eu seleciono o "Laboratório de Processos Químicos"
-    And no campo  "Data" eu vejo "21/02/2017" para início  e "24/03/2017" para final.
-    When eu peço para "Gerar Relatório"
+    And no campo data eu vejo "21/02/2017" para início  e "24/03/2017" para final.
+    When eu peço para Gerar Relatório
     And eu vou para a página de resumo de sistema
     Then eu devo visualizar a quantidade de resíduos produzidos, associado ao "Laboratório de Processos Químicos" entre as datas  "21/02/2017" e  "24/03/2017"
   
