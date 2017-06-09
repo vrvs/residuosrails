@@ -7,9 +7,9 @@
   <thead>
     <tr>
   
-      <th>Generate by</th>
-      <th>Begin dt</th>
-      <th>End dt</th>
+      <th>Gerador por:</th>
+      <th>Data inicial:</th>
+      <th>Data final:</th>
 
     </tr>
   </thead>
@@ -17,7 +17,11 @@
   <tbody>
     <% @reports.each do |report| %>
       <tr>
-        <td><%= report.generate_by %></td>
+        <td>
+          <% if report.generate_by == 1%>Departamento<%end%>
+          <% if report.generate_by == 2%>Laboratório<%end%>
+          <% if report.generate_by == 3%>Resíduo<%end%>
+         </td>
         <td><%= report.begin_dt %></td>
         <td><%= report.end_dt %></td>
         <td><%= link_to 'Show', report %></td>
