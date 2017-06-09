@@ -22,5 +22,5 @@ Rails.application.routes.draw do
   get '/types', to: 'application#types'
   get '/residues_lack', to: 'application#residues_lack'
   
-  post '/home_action_path', to: 'application#home'
+  post '/generate_types', to: 'application#generate_types'
 end

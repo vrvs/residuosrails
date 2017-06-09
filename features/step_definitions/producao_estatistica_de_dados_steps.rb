@@ -129,15 +129,15 @@ Given(/^eu estou na página de estatistica$/) do
   visit 'statistic'
 end
 
-Given(/^eu vejo a lista de "([^"]*)" vazia$/) do |arg1|
+Given(/^eu vejo a lista de "([^"]*)" vazia$/) do |list|
+  element = find("th", text: list)
+  expect(element).to_not be nil
   element = find("td", text: "Lista vazia")
   expect(element).to_not be nil
  end
 
- When(/^eu seleciono a opção "([^"]*)"$/) do |arg1|
- click_on(arg1)
- #page.save_screenshot()
-  
+ When(/^eu seleciono a opção "([^"]*)"$/) do |action|
+  click_on(action)
  end
 
  Then(/^eu vejo uma mensagem informando que não há resíduos cadastrados$/) do
@@ -145,3 +145,63 @@ Given(/^eu vejo a lista de "([^"]*)" vazia$/) do |arg1|
   expect(element.value).to eq("Não existe resíduos cadastrados")
   #page.save_screenshot()
  end
+ 
+Given(/^eu vejo a lista de "([^"]*)" com "([^"]*)" kg de "([^"]*)" de tipo "([^"]*)" e "([^"]*)" kg de "([^"]*)" de tipo "([^"]*)" e "([^"]*)" kg de "([^"]*)" de tipo "([^"]*)"$/) do |list, res_weight1, res_name1, res_type1, res_weight2, res_name2, res_type2, res_weight3, res_name3, res_type3|
+  cad_col_gui(7500)
+  cad_dep_gui("Departamento de Genetica")
+  cad_lab_gui("Laboratorio de Genetica Aplicada","Departamento de Genetica")
+  cad_res_gui(res_name1,"Laboratorio de Genetica Aplicada",res_type1)
+  cad_reg_gui(res_weight1,res_name1)
+  cad_res_gui(res_name2,"Laboratorio de Genetica Aplicada",res_type2)
+  cad_reg_gui(res_weight2,res_name2)
+  cad_res_gui(res_name3,"Laboratorio de Genetica Aplicada",res_type3)
+  cad_reg_gui(res_weight3,res_name3)
+  visit 'statistic'
+  element = find("th", text: list)
+  expect(element.text).to eq(list)
+  expect(page).to have_content res_name1+" "+res_type1+" "+res_weight1
+  expect(page).to have_content res_name2+" "+res_type2+" "+res_weight2
+  expect(page).to have_content res_name3+" "+res_type3+" "+res_weight3
+end
+
+Then(/^eu vejo uma lista com o "([^"]*)" com  "([^"]*)" kg de substâncias de tipo "([^"]*)" e "([^"]*)" kg de substâncias de tipo "([^"]*)"$/) do |list, res_weight1, res_type1, res_weight2, res_type2|
+  element = find("th", text: "Total de Resíduos Acumulados por Tipo")
+  expect(element.text).to eq(list)
+  expect(page).to have_content res_type1+" "+res_weight1
+  expect(page).to have_content res_type2+" "+res_weight2
+end
+ 
+ def cad_col_gui(max_value) 
+  visit '/collections/new'
+  fill_in('collection_max_value', :with => max_value)
+  click_button 'Create Collection'
+ end
+ 
+ def cad_dep_gui(dep_name)
+  visit '/departments/new'
+  fill_in('department_name', :with => dep_name)
+  click_button 'Create Department'
+ end
+
+def cad_lab_gui(lab_name, dep_name)
+  visit '/laboratories/new'
+  fill_in('laboratory_name', :with => lab_name)
+  page.select dep_name, :from => 'laboratory_department_id'
+  click_button 'Create Laboratory'
+  
+end
+
+def cad_res_gui(res_name, lab_name,res_type)
+  visit '/residues/new'
+  fill_in('residue_name', :with => res_name)
+  page.select res_type, :from => 'residue_kind'
+  page.select lab_name, :from => 'residue_laboratory_id'
+  click_button 'Create Residue'
+end
+
+def cad_reg_gui(weight, res_name)
+  visit '/registers/new'
+  fill_in('register_weight', :with => weight)
+  page.select res_name, :from => 'register_residue_id'
+  click_button 'Create Register'
+end
