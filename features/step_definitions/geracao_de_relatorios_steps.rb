@@ -175,15 +175,10 @@
          choice = 'rb3'
       end
       expect(find_field(choice)).to be_checked
-      
-   
-        
-    
   end
   
   Given(/^eu vejo uma lista de "([^"]*)" disponíveis no sistema\.$/) do |arg1|
-
-
+    
       expect(page.find(:id, 'report_list').visible?).to be true
       
   end
@@ -215,18 +210,25 @@
   end
   
   When(/^eu peço para Gerar Relatório$/) do 
-    page.save_screenshot
+    #check('report_total')
+    page.find(:checkbox, 'report_total').set(true)
     click_button 'Create Report'
   end
   
   When(/^eu vou para a página de resumo de sistema$/) do
-    pending # Write code here that turns the phrase above into concrete actions
+    visit '/reports'
   end
   
   Then(/^eu devo visualizar a quantidade de resíduos produzidos, associado ao "([^"]*)" entre as datas  "([^"]*)" e  "([^"]*)"$/) do |arg1, arg2, arg3|
-    pending # Write code here that turns the phrase above into concrete actions
+    #find('td').find('a[href="Show"]').click
+    find(:xpath, "//tr/td/a", :text => 'Show').click
+    page.save_screenshot
+    
   end
   
+  
+  
+#####################################Funções#############################################################################################  
   
   def sum_registers(res,data_begin,data_final)
      residues_total_in_data = 0
@@ -294,7 +296,7 @@
     click_button 'Create Register'
   end
   
-    end
+  
   
     
     

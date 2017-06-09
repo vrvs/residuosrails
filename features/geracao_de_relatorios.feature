@@ -39,8 +39,8 @@ Feature: Geração de Relatórios
     And  eu seleciono o "Departamento de Engenharia Química"
     And no campo data eu vejo "21/02/2017" para início  e "21/03/2017" para final.
     When eu peço para Gerar Relatório
-    And vou para a página de resumo de sistema
-    Then eu devo visualizar a quantidade de resíduos produzidos associado ao "Departamento de Engenharia Química" entre as datas  "21/02/2017" e  "21/03/2017"
+    And eu vou para a página de resumo de sistema
+    Then eu devo visualizar a quantidade de resíduos produzidos, associado ao "Departamento de Engenharia Química" entre as datas  "21/02/2017" e  "21/03/2017"
 
   @c5
   Scenario: Produzir relatório de múltiplos Departamentos / Laboratórios / Resíduos
