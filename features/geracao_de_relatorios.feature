@@ -22,7 +22,7 @@ Feature: Geração de Relatórios
   
   @c3
   Scenario: Produzir relatório de resíduos por laboratório entre datas específicas.
-    Given que estou na página Geração de Relatórios
+    Given que estou na página Geração de Relatórios e eu possuo "300" kg de resíduos cadastrados entre as datas  "21/02/2017" e  "24/03/2017"
     And a opção de gerar por "Laboratório" está selecionada
     And eu vejo uma lista de "Laboratórios" disponíveis no sistema.
     And  eu seleciono o "Laboratório de Processos Químicos"
@@ -33,7 +33,7 @@ Feature: Geração de Relatórios
   
   @c4
   Scenario: Produzir relatório mensal do total de resíduo(s) para um departamento específico.
-    Given que estou na página Geração de Relatórios
+    Given que estou na página Geração de Relatórios e eu possuo "500" kg de resíduos cadastrados entre as datas  "21/02/2017" e  "21/03/2017"
     And a opção de gerar por "Departamento" está selecionada
     And eu vejo uma lista de "Departamentos" disponíveis no sistema.
     And  eu seleciono o "Departamento de Engenharia Química"

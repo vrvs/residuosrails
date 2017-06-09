@@ -1,3 +1,92 @@
 // Place all the styles related to the reports controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+body {
+   background-color: white;
+    
+}
+
+h1 {
+    color: 	#FFFFFF;
+    font-family: verdana;
+    font-size: 20px;
+   
+}
+
+p {
+    font-family: verdana;
+    font-size: 20px;
+}
+
+
+.flex-container {
+    display: inline-block;
+    width: 600px;
+    height: 5px;
+    margin: 20px;
+   
+}
+
+.d {
+    justify-content:space-around;
+}
+
+.d input{
+    text-align:center;
+}
+.title{
+    
+     display: inline-block;
+     width: 100%;
+     background-color: #4682B4;
+     height: 45px;
+     
+}
+.field_generate{
+    padding-top: 50px;
+    
+
+}
+.field_generate label{
+    font-family: verdana;
+    font-size: 15px;
+    
+}
+.e {
+    justify-content:space-between;
+    width: 50%;
+    display: inline-flex;
+    padding-bottom: 30px;
+   
+}
+.f{
+    justify-content:space-between;
+    width: 70%;
+    display: inline-flex;
+    padding-bottom: 30px;
+    
+}
+.divider{
+    padding-top: 3px;
+    font-family: verdana;
+    color: 	#FFFFFF;
+    font-size: 15px;
+    width: 100%;
+    background-color: #4682B4;
+}
+.table_style{
+    overflow-x: auto
+    
+}
+table, th{
+    border-bottom: 1px solid #4682B4;
+}
+table, th, td {
+   background-color: #FFFFFF;
+   color: #4682B4;
+   
+}
+td{
+    width: 8%;
+    
+}

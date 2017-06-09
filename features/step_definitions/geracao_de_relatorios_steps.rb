@@ -8,6 +8,7 @@
     dep = Department.find_by(name: dep_name)
     expect(dep).to_not be nil
     lab = create_laboratory({laboratory: {name: lab_name, department_id: dep.id}})
+    expect(lab).to_not be nil
    end 
   
   Given(/^o sistema possui "([^"]*)"kg de resíduos cadastrados no laboratório de "([^"]*)"$/) do |res_weight, lab_name|
@@ -141,7 +142,7 @@
   end
   ##################################################GUI######################################################################
   
-  Given(/^que estou na página Geração de Relatórios/) do
+  Given(/^que estou na página Geração de Relatórios e eu possuo "([^"]*)" kg de resíduos cadastrados entre as datas  "([^"]*)" e  "([^"]*)"$/) do |arg1, arg2,arg3|
      
       dep_name = "Departamento de Engenharia Química"
       lab_name = "Laboratório de Processos Químicos"
@@ -149,17 +150,13 @@
       create_department_gui(dep_name)
       create_laboratory_gui(lab_name, dep_name)
       create_residue_gui(res_name, lab_name)
-      create_register_gui(175.to_f(), res_name)
+      create_register_gui(arg1.to_f(), res_name)
+      lab = Laboratory.find_by(name: lab_name)
+      res = Residue.find_by(name: res_name, laboratory_id: lab.id)
+      modify_date_last_register(res, arg2)
       res_name = "Sulfato de Amônio"
       create_residue_gui(res_name,lab_name)
       create_register_gui(100.to_f(), res_name)
-      
-      dep_name = "Departamento de Física"
-      lab_name = "Laboratório de Análises"
-      #create_department_gui(dep_name)
-      #create_laboratory_gui(lab_name, dep_name)
-      
-     
     visit '/reports/new'
   end
   
@@ -210,7 +207,6 @@
   end
   
   When(/^eu peço para Gerar Relatório$/) do 
-    #check('report_total')
     page.find(:checkbox, 'report_total').set(true)
     click_button 'Create Report'
   end
@@ -220,7 +216,6 @@
   end
   
   Then(/^eu devo visualizar a quantidade de resíduos produzidos, associado ao "([^"]*)" entre as datas  "([^"]*)" e  "([^"]*)"$/) do |arg1, arg2, arg3|
-    #find('td').find('a[href="Show"]').click
     find(:xpath, "//tr/td/a", :text => 'Show').click
     page.save_screenshot
     
