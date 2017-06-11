@@ -141,9 +141,9 @@
     expect(repc[0].kind).to eq (kind)
   end
   ##################################################GUI######################################################################
-  
+  @argument = ''
   Given(/^que estou na página Geração de Relatórios e eu possuo "([^"]*)" kg de resíduos cadastrados entre as datas  "([^"]*)" e  "([^"]*)"$/) do |arg1, arg2,arg3|
-     
+     @argument = arg1
       dep_name = "Departamento de Engenharia Química"
       lab_name = "Laboratório de Processos Químicos"
       res_name = "Hidróxido de Amônio"
@@ -216,7 +216,9 @@
   end
   
   Then(/^eu devo visualizar a quantidade de resíduos produzidos, associado ao "([^"]*)" entre as datas  "([^"]*)" e  "([^"]*)"$/) do |arg1, arg2, arg3|
+
     find(:xpath, "//tr/td/a", :text => 'Show').click
+    expect(page).to have_content @argument 
     page.save_screenshot
     
   end
