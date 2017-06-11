@@ -25,9 +25,11 @@
          </td>
         <td><%= report.begin_dt %></td>
         <td><%= report.end_dt %></td>
-        <td><%= link_to 'Show', report,  class: 'css_btn_class' %>
-        <%= link_to 'Edit', edit_report_path(report),class: 'css_btn_class' %>
-        <%= link_to 'Destroy', report, method: :delete, data: { confirm: 'Are you sure?' },class: 'css_btn_class' %></td>
+        <td>
+          <%= link_to 'Show', report,  class: 'css_btn_class' %>
+          <%= link_to 'Edit', edit_report_path(report),class: 'css_btn_class' %>
+          <%= link_to 'Destroy', report, method: :delete, data: { confirm: 'Are you sure?' },class: 'css_btn_class' %>
+        </td>
       </tr>
     <% end %>
   </tbody>

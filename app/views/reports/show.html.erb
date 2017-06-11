@@ -39,11 +39,11 @@
       <% if @report.onu %><th>Código ONU</th><% end %>
       <% if @report.blend %><th>Composição</th><% end %>
     </tr>
+      
   </thead>
 
   <tbody>
     <% @report.reportcells.each do |rcell| %>
-      <tr>
         <% if @report.generate_by == 1 %><td><%= rcell.dep_name[16,rcell.dep_name.size] %></td><% end %>
         <% if @report.generate_by == 2 %><td><%= rcell.lab_name[15,rcell.lab_name.size]  %></td><% end %>
         <td><%= rcell.res_name %></td>
@@ -56,7 +56,14 @@
         <% if @report.blend %><td><%= rcell.blend %></td><% end %>
       </tr>
     <% end %>
+        
   </tbody>
+</table>
+
+<table>
+  <thead>
+     <% if @report.total %><tr><p>Somatório total: <%=@report.reportcells.sum(:total)%></p> </tr><%end%>
+  </thead>
 </table>
 
 <%= link_to 'Editar', edit_report_path(@report),class: 'css_btn_class' %> |
