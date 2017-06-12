@@ -174,15 +174,21 @@
       expect(find_field(choice)).to be_checked
   end
   
-  Given(/^eu vejo uma lista de "([^"]*)" disponíveis no sistema\.$/) do |arg1|
-    
+  Given(/^eu vejo uma lista de "([^"]*)" disponíveis no sistema$/) do |arg1|
+      divID = nil
+      if("Departamentos" == arg1) then
+        divID = "rb1_list"
+      elsif("Laboratórios" == arg1) then
+        divID = "rb2_list"
+      elsif("Resíduos" == arg1) then
+        divID = "rb3_list"
+      end
+      expect(page.find(:id, divID).visible?).to be true
       expect(page.find(:id, 'report_list').visible?).to be true
-      
   end
   
-  Given(/^eu seleciono o "([^"]*)"$/) do |arg1|
-       page.select arg1, :from => 'report_list'
-       
+  Given(/^eu seleciono a opção "([^"]*)" na lista$/) do |option|
+       page.select option, :from => 'report_list'
   end
   
   Given(/^no campo data eu vejo "([^"]*)" para início  e "([^"]*)" para final\.$/) do |arg1, arg2|
@@ -201,9 +207,6 @@
     page.select mes, :from => 'report_end_dt_2i'
     dia = d.wday
     page.select dia, :from => 'report_end_dt_3i'
-    
-    
-    
   end
   
   When(/^eu peço para Gerar Relatório$/) do 
@@ -216,14 +219,64 @@
   end
   
   Then(/^eu devo visualizar a quantidade de resíduos produzidos, associado ao "([^"]*)" entre as datas  "([^"]*)" e  "([^"]*)"$/) do |arg1, arg2, arg3|
-
     find(:xpath, "//tr/td/a", :text => 'Show').click
     expect(page).to have_content @argument 
     page.save_screenshot
-    
+  end
+
+  Given(/^que foi feito o cadastro do laboratório de "([^"]*)" com o resíduo "([^"]*)" onde o tipo é "([^"]*)" e a quantidade total é "([^"]*)"Kg$/) do |lab_name, res_name, kind, total|
+    create_department_gui("dep base: " + lab_name);
+    create_laboratory_gui(lab_name, "dep base: " + lab_name);
+    visit '/residues/new'
+    fill_in('residue_name', :with => res_name)
+    page.select kind, :from => 'residue_kind'
+    page.select lab_name, :from => 'residue_laboratory_id'
+    click_button 'Create Residue'
+    create_register_gui(total, res_name)
   end
   
+  Given(/^que estou na página de Geração de Relatórios$/) do
+    visit '/reports/new'
+  end
   
+  When(/^eu seleciono o filtro "([^"]*)"$/) do |filter|
+    if filter == 'tipo' then
+      page.find(:checkbox, 'report_kind').trigger("click")
+    elsif filter == 'total'
+      page.find(:checkbox, 'report_total').set(true)
+    end
+  end
+  
+  When(/^peço para criar um novo relátorio$/) do
+    select (Time.now.year()-1), :from => 'report_begin_dt_1i'
+    select (Time.now.year()+1), :from => 'report_end_dt_1i'
+    click_button 'Create Report'
+  end
+  
+  Then(/^sou redirecionado para a página do relatório de "([^"]*)"$/) do |generate_by|
+    expect(page).to have_content "Relatório de "+generate_by
+  end
+  
+  Then(/^vejo uma tabela com os dados sobre o Laboratório de "([^"]*)" contendo nome, tipo e quantidade total dos resíduos$/) do |lab_name|
+    expect(page.find('td', text: lab_name).visible?).to be true
+    expect(page.find('th', text: 'Nome do res.').visible?).to be true
+    expect(page.find('th', text: 'Tipo').visible?).to be true
+    expect(page.find('th', text: 'Total (peso)').visible?).to be true
+  end
+  
+  Then(/^vejo na coluna nome do residuo "([^"]*)", na coluna tipo "([^"]*)" e na coluna quantidade total "([^"]*)"Kg\.$/) do |res_name, kind, total|
+    expect(page.find('tr', text: res_name).find('td', text: res_name).visible?).to be true
+    expect(page.find('tr', text: res_name).find('td', text: kind).visible?).to be true
+    expect(page.find('tr', text: res_name).find('td', text: total).visible?).to be true
+  end
+  
+  Given(/^que foi feito o cadastro do departamento de "([^"]*)" sem nenhum residuo cadastrado$/) do |dep_name|
+    create_department_gui(dep_name)
+  end
+  
+  Then(/^eu vejo uma mensagem de notificação informando a inexistência de resíduos ligados aos departamentos.$/) do
+    expect(page.find('div', id: 'error_explanation').visible?).to be true
+  end
   
 #####################################Funções#############################################################################################  
   
@@ -268,7 +321,6 @@
     visit '/departments/new'
     fill_in('department_name', :with => arg1)
     click_button 'Create Department'
-   
   end
   
   def create_laboratory_gui(arg1, arg2)
@@ -276,7 +328,6 @@
     fill_in('laboratory_name', :with => arg1)
     page.select arg2, :from => 'laboratory_department_id'
     click_button 'Create Laboratory'
-    
   end
   
   def create_residue_gui(arg1, arg2)
@@ -292,11 +343,4 @@
     page.select arg2, :from => 'register_residue_id'
     click_button 'Create Register'
   end
-  
-  
-  
-    
-    
-    
-    
   

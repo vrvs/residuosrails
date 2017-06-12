@@ -38,7 +38,41 @@ class ReportsController < ApplicationController
     end
     
     respond_to do |format|
-      if @report.save
+      error = true
+      case report_params[:generate_by].to_i
+        when 0
+          error = false
+        when 1  #teste por departamento
+          report_params[:list].each do |dep_name|
+            if dep_name == "" then
+              next
+            end
+            labs = Department.find_by(name: dep_name).laboratories
+            if labs != nil then
+              labs.each do |lab|
+                if !lab.residues.empty? then
+                  error = false
+                end
+              end
+            end
+          end
+        when 2  #teste por laboratórios
+          report_params[:list].each do |lab_name|
+            if lab_name == "" then
+              next
+            end
+            if !Laboratory.find_by(name: lab_name).residues.empty? then
+              error = false
+            end
+          end
+        when 3
+          error = false
+      end
+      if error
+        @report.errors.add(:list, :blank, message: "Não há residuos associados a esse(s) departamento(s)/laboratório(s)!")
+        format.html { render :new }
+        format.json { render json: @report.errors, status: :unprocessable_entity }
+      elsif @report.save
         format.html { redirect_to @report, notice: 'Report was successfully created.' }
         format.json { render :show, status: :created, location: @report }
         case report_params[:generate_by].to_i
