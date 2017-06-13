@@ -248,8 +248,7 @@
       
   end
   
-<<<<<<< HEAD
-  Given(/^eu vejo uma lista de "([^"]*)" disponíveis no sistema\.$/) do |option|
+  Given(/^eu vejo uma lista de "([^"]*)" disponíveis no sistema$/) do |option|
      
       if option == "Departamentos" then
          choice = 'rb1_list'
@@ -263,7 +262,7 @@
       
   end
   
-  Given(/^eu seleciono "([^"]*)"$/) do |option|
+  Given(/^eu seleciono a opção "([^"]*)" na lista$/) do |option|
        page.select option, :from => 'report_list'
        
   end
@@ -271,40 +270,6 @@
   Given(/^no campo data eu vejo "([^"]*)" para início  e "([^"]*)" para final\.$/) do |data_begin, data_final|
     put_data_begin_gui(data_begin.to_date,data_final.to_date)
     
-=======
-  Given(/^eu vejo uma lista de "([^"]*)" disponíveis no sistema$/) do |option|
-      choice = nil
-      if("Departamentos" == option) then
-        choice = "rb1_list"
-      elsif("Laboratórios" == option) then
-        choice = "rb2_list"
-      elsif("Resíduos" == option) then
-        choice = "rb3_list"
-      end
-      expect(page.find(:id, choice).visible?).to be true
-  end
-  
-  Given(/^eu seleciono a opção "([^"]*)" na lista$/) do |option|
-       page.select option, :from => 'report_list'
-  end
-  
-  Given(/^no campo data eu vejo "([^"]*)" para início  e "([^"]*)" para final\.$/) do |arg1, arg2|
-    d = arg1.to_date
-    ano = d.cwyear
-    page.select ano, :from => 'report_begin_dt_1i'
-    mes = d.strftime("%B")
-    page.select mes, :from => 'report_begin_dt_2i'
-    dia = d.wday
-    page.select dia, :from => 'report_begin_dt_3i'
-    
-    d = arg2.to_date
-    ano = d.cwyear
-    page.select ano, :from => 'report_end_dt_1i'
-    mes = d.strftime("%B")
-    page.select mes, :from => 'report_end_dt_2i'
-    dia = d.wday
-    page.select dia, :from => 'report_end_dt_3i'
->>>>>>> 9d9681e106b11dca15c0250aef0ee4633bab3a89
   end
   
   When(/^eu peço para Gerar Relatório$/) do 
@@ -316,14 +281,8 @@
      expect(page).to have_content "Relatório de " 
   end
   
-<<<<<<< HEAD
   Then(/^eu devo visualizar "([^"]*)" de resíduos produzidos, associado a "([^"]*)" entre as datas  "([^"]*)" e  "([^"]*)"$/) do |res_weight, name, data_begin,data_final|
     expect(page).to have_content res_weight 
-=======
-  Then(/^eu devo visualizar a quantidade de resíduos produzidos, associado ao "([^"]*)" entre as datas  "([^"]*)" e  "([^"]*)"$/) do |arg1, arg2, arg3|
-    find(:xpath, "//tr/td/a", :text => 'Show').click
-    expect(page).to have_content @argument 
->>>>>>> 9d9681e106b11dca15c0250aef0ee4633bab3a89
     page.save_screenshot
   end
 
@@ -343,14 +302,6 @@
     #garante que na pagina visitada existe um intervalo minino valido para gerar um laboratorio
     select (Time.now.year()-1), :from => 'report_begin_dt_1i'
     select (Time.now.year()+1), :from => 'report_end_dt_1i'
-  end
-  
-  When(/^eu seleciono o filtro "([^"]*)"$/) do |filter|
-    if filter == 'tipo' then
-      page.find(:checkbox, 'report_kind').trigger("click")
-    elsif filter == 'total'
-      page.find(:checkbox, 'report_total').set(true)
-    end
   end
   
   When(/^peço para criar um novo relátorio$/) do
@@ -406,7 +357,6 @@
     post '/reports', rep
   end
   
-<<<<<<< HEAD
  Given(/^eu possuo "([^"]*)" cadastrado em "([^"]*)"$/) do |option, option1|
    create_department_gui("Qualquer")
    create_laboratory_gui(option1,"Qualquer")
@@ -426,7 +376,6 @@ Then(/^eu devo visualizar "([^"]*)" na lista com os nomes de resíduos associado
 end
   
   
-=======
   When(/^eu tento produzir um relatório do resíduo "([^"]*)"$/) do |res_name|
     rep = {report: {
       generate_by: 3, 
@@ -449,7 +398,6 @@ end
     repc = Reportcell.find_by(res_name: res_name)
     expect(repc.total).to eq(quant.to_f())
   end
->>>>>>> 9d9681e106b11dca15c0250aef0ee4633bab3a89
   
   Given(/^que foi feito o cadastro do departamento de "([^"]*)" com o resíduo "([^"]*)" e a quantidade total é "([^"]*)"Kg$/) do |dep_name, res_name, total|
     create_department_gui(dep_name)
@@ -476,6 +424,27 @@ end
     expect(div_error.visible?).to be true
     expect(div_error).to have_content "intervalo de data invalido: a data e hora de inicio esta posterior ou iqual a data e hora de final do intervalo requerido."
   end
+  
+  Given(/^que possuo uma coleta com limite de peso "([^"]*)"$/) do |col_weight|
+    create_collection_gui(col_weight)
+  end
+  Given(/^eu possuo o resíduo "([^"]*)" associado a coleta$/) do |res_name|
+      dep_name = "Engenharia Química"
+      lab_name = "Processos Químicos"
+      create_department_gui(dep_name)
+      create_laboratory_gui(lab_name, dep_name)
+      create_residue_gui(res_name, lab_name)           #Por padrão um residuo é automaticamente na coleta mais recente
+      create_register_gui(200.to_f(), res_name)
+  end
+  
+  Then(/^eu devo visualizar uma tabela com os nomes de resíduos associados a coleta$/) do
+    expect(page.find('table').visible?).to be true
+    page.save_screenshot
+  end
+  
+  Then(/^eu devo visualizar "([^"]*)" em uma linha da tabela$/) do |option|
+    expect(page.find('td', text: option).visible?).to be true
+end
   
 #####################################Funções#############################################################################################  
   
@@ -547,7 +516,13 @@ end
     page.select arg2, :from => 'register_residue_id'
     click_button 'Create Register'
   end
-<<<<<<< HEAD
+  
+  def create_collection_gui(arg1)
+    visit '/collections/new'
+    fill_in('collection_max_value', :with => arg1)
+    click_button 'Create Collection'
+  end
+  
   
   def put_data_begin_gui(data_begin,data_final)
     
@@ -584,6 +559,3 @@ end
     
     
   
-=======
-  
->>>>>>> 9d9681e106b11dca15c0250aef0ee4633bab3a89
