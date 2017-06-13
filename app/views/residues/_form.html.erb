@@ -44,7 +44,7 @@
   <div class="field">
     <%= f.label :collection_id %>
     <%if !Collection.all.empty?%>
-    <%= f.collection_select(:collection_id, Collection.all.where(created_at: Collection.last.created_at), :id, :id) %>
+      <%= f.collection_select(:collection_id, Collection.all.where(created_at: Collection.last.created_at), :id, :id) %>
     <% end %>
   </div>
 

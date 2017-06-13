@@ -1,3 +1,32 @@
 // Place all the styles related to the reports controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+#report_begin_dt_1i, #report_end_dt_1i {
+    width: 23%;
+}
+
+#report_begin_dt_2i, #report_end_dt_2i {
+    width: 51.1%;
+}
+
+#report_begin_dt_3i, #report_end_dt_3i {
+    width: 23%;
+}
+
+#report_begin_dt_4i, #report_end_dt_4i {
+    width: 20%;
+}
+
+#report_begin_dt_5i, #report_end_dt_5i {
+    width: 20%;
+}
+
+#report_list {
+    width: 100%;
+    height: 110px;
+}
+
+label {
+    font-weight: bold;
+}

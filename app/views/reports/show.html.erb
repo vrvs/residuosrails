@@ -1,59 +1,23 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Generate by:</strong>
-  <%= @report.generate_by %>
-</p>
+<h1>
+  <strong>Relatório de </strong>
+  <% if @report.generate_by == 0 %>coleta<%end%>
+  <%if @report.generate_by == 1 %>departamentos<%end%>
+  <% if @report.generate_by == 2 %>laboratórios<%end%>
+  <% if @report.generate_by == 3 %>resíduos<%end%>
+</h1>
 
 <p>
-  <strong>Begin dt:</strong>
+  <strong>Data inicial:</strong>
   <%= @report.begin_dt %>
 </p>
 
 <p>
-  <strong>End dt:</strong>
+  <strong>Data final:</strong>
   <%= @report.end_dt %>
 </p>
 
-<p>
-  <strong>Unit:</strong>
-  <%= @report.unit %>
-</p>
-
-<p>
-  <strong>State:</strong>
-  <%= @report.state %>
-</p>
-
-<p>
-  <strong>Kind:</strong>
-  <%= @report.kind %>
-</p>
-
-<p>
-  <strong>Onu:</strong>
-  <%= @report.onu %>
-</p>
-
-<p>
-  <strong>Blend:</strong>
-  <%= @report.blend %>
-</p>
-
-<p>
-  <strong>Code:</strong>
-  <%= @report.code %>
-</p>
-
-<p>
-  <strong>Total:</strong>
-  <%= @report.total %>
-</p>
-
-<p>
-  <strong>Collection:</strong>
-  <%= @report.collection %>
-</p>
 
 <table>
   <thead>
@@ -69,11 +33,11 @@
       <% if @report.onu %><th>Código ONU</th><% end %>
       <% if @report.blend %><th>Composição</th><% end %>
     </tr>
+      
   </thead>
 
   <tbody>
     <% @report.reportcells.each do |rcell| %>
-      <tr>
         <% if @report.generate_by == 1 %><td><%= rcell.dep_name %></td><% end %>
         <% if @report.generate_by == 2 %><td><%= rcell.lab_name %></td><% end %>
         <td><%= rcell.res_name %></td>
@@ -86,8 +50,13 @@
         <% if @report.blend %><td><%= rcell.blend %></td><% end %>
       </tr>
     <% end %>
+        
   </tbody>
 </table>
 
-<%= link_to 'Edit', edit_report_path(@report) %> |
-<%= link_to 'Back', reports_path %>
+<% if @report.total%>
+  <p>Somatório total: <%=@report.reportcells.sum(:total)%></p>
+<%end%>
+
+<%= link_to 'Editar', edit_report_path(@report) %> | 
+<%= link_to 'Voltar', reports_path %>

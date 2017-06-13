@@ -1,5 +1,30 @@
-<h1>Estatistica</h1>
-<table>
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="brand" href="/main_adm"><strong>SGRQ</strong> - Resíduos Químicos</a>
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    <li><a href="/statistic">Relatórios</a></li>
+                    <li class="active"><a href="/statistic">Estatístico</a></li>
+                    <li><a href="/request">Requisições</a></li>
+                    <li><a href="/account">Perfil</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+<br><br>
+<h1>Estatística</h1>
+
+
+<table class="table table-striped">
   <thead>
     <tr>
       <th>Resíduos Cadastrados</th>
@@ -39,7 +64,7 @@
   <% if Residue.all.empty? %>
     <form name='form1'>
       
-      <input onclick='input()' type='button' value='Gerar Previsão de Notificação de Coleta' id='button'><br>
+      <input onclick='input()' type='button' value='Gerar Previsão de Notificação de Coleta' id='button', class: btn><br>
       <input onclick='input()' type='button' value='Gerar Total de Resíduos Acumulados por Tipo' id='button'><br>
       <input onclick='input()' type='button' value='Gerar Total de Resíduos Acumulados por Tipo em Porcentagem' id='button'><br>
       <input onclick='input()' type='button' value='Gerar Resíduo Mais Frequentemente Cadastrado por Laboratorio' id='button'><br>
@@ -54,4 +79,4 @@
   <% end %>
 </body>
 
-
+</div>
