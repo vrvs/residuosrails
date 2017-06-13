@@ -44,8 +44,8 @@
 
   <tbody>
     <% @report.reportcells.each do |rcell| %>
-        <% if @report.generate_by == 1 %><td><%= rcell.dep_name[16,rcell.dep_name.size] %></td><% end %>
-        <% if @report.generate_by == 2 %><td><%= rcell.lab_name[15,rcell.lab_name.size]  %></td><% end %>
+        <% if @report.generate_by == 1 %><td><%= rcell.dep_name%></td><% end %>
+        <% if @report.generate_by == 2 %><td><%= rcell.lab_name%></td><% end %>
         <td><%= rcell.res_name %></td>
         <% if @report.kind %><td><%= rcell.kind %></td><% end %>
         <% if @report.state %><td><%= rcell.state %></td><% end %>

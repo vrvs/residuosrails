@@ -22,27 +22,108 @@ Feature: Geração de Relatórios
   
   @c3
   Scenario: Produzir relatório de resíduos por laboratório entre datas específicas.
-    Given que estou na página Geração de Relatórios e eu possuo "300" kg de resíduos cadastrados entre as datas  "21/02/2017" e  "24/03/2017"
+    Given eu possuo "300" kg de resíduos cadastrados entre as datas  "21/02/2017" e  "24/03/2017"
+    And que estou na página Geração de Relatórios
     And a opção de gerar por "Laboratório" está selecionada
+    And eu seleciono o filtro "total"
     And eu vejo uma lista de "Laboratórios" disponíveis no sistema.
-    And  eu seleciono o "Laboratório de Processos Químicos"
+    And  eu seleciono "Processos Químicos"
     And no campo data eu vejo "21/02/2017" para início  e "24/03/2017" para final.
     When eu peço para Gerar Relatório
     And eu vou para a página de resumo de sistema
-    Then eu devo visualizar a quantidade de resíduos produzidos, associado ao "Laboratório de Processos Químicos" entre as datas  "21/02/2017" e  "24/03/2017"
+    Then eu devo visualizar "300" de resíduos produzidos, associado a "Processos Químicos" entre as datas  "21/02/2017" e  "24/03/2017"
   
   @c4
   Scenario: Produzir relatório mensal do total de resíduo(s) para um departamento específico.
-    Given que estou na página Geração de Relatórios e eu possuo "500" kg de resíduos cadastrados entre as datas  "21/02/2017" e  "21/03/2017"
+    Given eu possuo "500" kg de resíduos cadastrados entre as datas  "21/02/2017" e  "21/03/2017"
+    And que estou na página Geração de Relatórios
     And a opção de gerar por "Departamento" está selecionada
+    And eu seleciono o filtro "total"
     And eu vejo uma lista de "Departamentos" disponíveis no sistema.
-    And  eu seleciono o "Departamento de Engenharia Química"
+    And  eu seleciono "Engenharia Química"
     And no campo data eu vejo "21/02/2017" para início  e "21/03/2017" para final.
     When eu peço para Gerar Relatório
     And eu vou para a página de resumo de sistema
-    Then eu devo visualizar a quantidade de resíduos produzidos, associado ao "Departamento de Engenharia Química" entre as datas  "21/02/2017" e  "21/03/2017"
+    Then eu devo visualizar "500" de resíduos produzidos, associado a "Engenharia Química" entre as datas  "21/02/2017" e  "21/03/2017"
+
 
   @c5
+  Scenario: Produzir relatório de Departamento sem filtros aplicados
+    Given eu possuo "Hidróxido de Amônio" cadastrado em "Processos Químicos"
+    And que estou na página Geração de Relatórios
+    And a opção de gerar por "Laboratório" está selecionada
+    And eu vejo uma lista de "Laboratórios" disponíveis no sistema.
+    And eu seleciono "Processos Químicos"
+    And no campo data eu vejo "21/02/2017" para início  e "24/03/2017" para final.
+    And no campo filtros eu não seleciono nenhum filtro
+    When eu peço para Gerar Relatório
+    And eu vou para a página de resumo de sistema
+    Then eu devo visualizar "Hidróxido de Amônio" na lista com os nomes de resíduos associados a "Processos Químicos"
+    
+  @c6
+  Scenario: Produzir relatório da coleta corrente
+    Given que possuo uma coleta com limite de peso "5000"
+    And eu possuo o resíduo "Hidróxido de Amônio" associado a coleta
+    And eu possuo o resíduo "Ácido Clorídrico" associado a coleta
+    And que estou na página Geração de Relatórios
+    And a opção de gerar por "Coleta" está selecionada
+    And no campo filtros eu seleciono "Total"
+    When eu peço para Gerar Relatório
+    And eu vou para a página de resumo de sistema
+    Then eu devo visualizar uma tabela com os nomes de resíduos associados a coleta
+    And eu devo visualizar "Hidróxido de Amônio" em uma linha da tabela
+    And eu devo visualizar "Ácido Clorídrico" em uma linha da tabela
+    
+    
+  @c7
+  Scenario: Produzir um relatório do Resíduo com maior registro em um Laboratório
+    Given o sistema possui o departamento de "Engenharia Química" cadastrado
+    And o sistema possui o laboratório de "Processos Químicos" cadastrado no departamento de "Engenharia Química"
+    And o sistema possui "300" kg de "Sulfato de Sódio" cadastrados para o laboratorio de "Processos Químicos"
+    And o sistema possui "700" kg de "Amônia" cadastrados para o laboratorio de "Processos Químicos"
+    And o sistema possui "200" kg de "Ácido Clorídrico" cadastrados para o laboratorio de "Processos Químicos"
+    When eu tento produzir o relatório para o Laboratório de "Processos Químicos"
+    Then o valor retornado pelo sistema será "700" kg referente ao Resíduo com maior registro
+    
+    
+    
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  @c9
   Scenario: Produzir relatório de múltiplos Departamentos / Laboratórios / Resíduos
     Given o sistema possui o departamento de "Anatomia Humana" cadastrado com o resíduo "Hidróxido de Amônio" com quantidade total de "150"Kg
     And o sistema possui o departamento de "Biofísica Radiologia" cadastrado com o resíduo "Hidróxido de Amônio" com quantidade total de "25"Kg
@@ -51,7 +132,7 @@ Feature: Geração de Relatórios
     Then o sistema retorna o valor de "175"Kg para o resíduo "Hidróxido de Amônio"
     And o sistema retorna o valor de "100"Kg para o resíduo "Sulfato de Amônio"
 
-  @c6
+  @c10
   Scenario: Produzir relatórios com filtros sobre Departamentos / Laboratórios
     Given o sistema possui o departamento de "Engenharia Química" cadastrado
     And o sistema possui o laboratório de "Planejamento Avaliação e Síntese de Fármacos" cadastrado no departamento de "Engenharia Química"
@@ -59,7 +140,7 @@ Feature: Geração de Relatórios
     When eu tento produzir um relatório dos resíduos do laboratório de "Planejamento Avaliação e Síntese de Fármacos", com os filtros tipo e peso.
     Then o sistema retorna as informações "Liquido Inorganico" e "300"Kg para o resíduo "Ácido Clorídrico"
   
-  @c7
+  @c11
   Scenario: Produzir relatório de Departamentos / Laboratórios sem resíduos associados
     Given que estou na página "reports/new"
     And a opção de gerar por "Departamentos" está selecionada
@@ -69,7 +150,7 @@ Feature: Geração de Relatórios
     And peço para criar um novo relátorio
     Then eu vejo uma mensagem de notificação informando a inexistência de resíduos ligados ao departamento de "Ciências Farmacêuticas".
   
-  @c8
+  @c12
   Scenario: Produzir relatório de Departamentos / Laboratórios / Resíduos
     Given que estou na página "reports/new"
     And a opção de gerar por "Laboratórios" está selecionada
@@ -81,3 +162,9 @@ Feature: Geração de Relatórios
     Then sou redirecionado para a página de resumo do sistema
     And vejo uma tabela com os dados sobre o "Laboratório de Bioprocessos e Bioprodutos" onde há 3 colunas, contendo nome, tipo e quantidade total dos resíduos
     And vejo na coluna nome "Ácido Nítrico", na coluna estado físico "Líquido" e na coluna quantidade total "93""Kg".
+    
+    
+    
+    
+    
+ 
