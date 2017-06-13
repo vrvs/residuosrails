@@ -21,49 +21,30 @@
 
 <div class="container">
 <br><br>
-
-<h1>Residuos Divididos por Tipos</h1>
-
+<h1>Resíduos mais Cadastrados</h1>
 <% @collection = Collection.last %>
 <table class="table table-striped">
   <thead>
     <tr>
-      <th>Total de Resíduos Acumulados por Tipo</th>
+      <th>Resíduo Mais Frequentemente Cadastrado por Laboratorio</th>
       <tr>
-          <th>Tipo</th>
-          <th>Peso</th>
+          <th>Laboratorio</th>
+          <th>Resíduo</th>
           <th colspan="3"></th>
         </tr>
     </tr>
   </thead>
 
   <tbody>
-    <% @collection.type_residue %>
-    <tr>
-      <td>Sólido Orgânico</td>
-      <td><%= @collection.solido_organico %> kg</td>
-    </tr>
-    <tr>
-      <td>Sólido Inorgânico</td>
-      <td><%= @collection.solido_inorganico %> kg</td>
-    </tr>
-    <tr>
-      <td>Líquido Orgânico</td>
-      <td><%= @collection.liquido_organico %> kg</td>
-    </tr>
-    <tr>
-      <td>Líquido Inorgânico</td>
-      <td><%= @collection.liquido_inorganico %> kg</td>
-    </tr>
-    <tr>
-      <td>Líquido Inflamável</td>
-      <td><%= @collection.liquido_inflamavel %> kg</td>
-    </tr>
-    <tr>
-    <td>Outros</td>
-      <td><%= @collection.outros %> kg</td>
-    </tr>
+    <% @collection.residue_often_registered %>
+    <% Laboratory.all.each do |laboratory| %>
+      <tr>
+        <td><%= laboratory.name %></td>
+        <td><%= @collection.residue_often_registered_list[laboratory.name.parameterize.underscore.to_sym] %></td/>
+      </tr>
+    <% end %>
   </tbody>
 </table>
 <br>
+
 </div>

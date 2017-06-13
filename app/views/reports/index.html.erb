@@ -1,8 +1,29 @@
-<p id="notice"><%= notice %></p>
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="brand" href="/main_adm"><strong>SGRQ</strong> - Resíduos Químicos</a>
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    <li><a href="/statistic">Relatórios</a></li>
+                    <li class="active"><a href="/statistic">Estatístico</a></li>
+                    <li><a href="/request">Requisições</a></li>
+                    <li><a href="/account">Perfil</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
 
+<div class="container">
+<p id="notice"><%= notice %></p>
 <h1>Histórico de Relatórios</h1>
 
-<table>
+<table class="table table-striped">
   <thead>
     <tr>
       <th>Gerado por:</th>
@@ -23,9 +44,8 @@
         <td><%= report.begin_dt %></td>
         <td><%= report.end_dt %></td>
         <td>
-          <%= link_to 'Show', report %>
-          <%= link_to 'Edit', edit_report_path(report) %>
-          <%= link_to 'Destroy', report, method: :delete, data: { confirm: 'Are you sure?' } %>
+          <%= link_to 'Show', report,class: 'btn' %>
+          <%= link_to 'Destroy', report, method: :delete, data: { confirm: 'Are you sure?' },class: 'btn'  %>
         </td>
       </tr>
     <% end %>
@@ -35,5 +55,6 @@
 
 <br>
 
-<%= link_to 'Voltar', main_adm_path,class: 'css_btn_class' %>
-<%= link_to 'Novo Relatório', new_report_path,class: 'css_btn_class' %>
+<%= link_to 'Voltar', main_adm_path,class: 'btn' %>
+<%= link_to 'Novo Relatório', new_report_path,class: 'btn' %>
+</div>

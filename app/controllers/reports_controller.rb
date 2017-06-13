@@ -188,6 +188,8 @@ class ReportsController < ApplicationController
     end
   end
   
+  
+  
   def add_registers(res)
     regs = res.registers.where(created_at: [@begin_datetime..@end_datetime]).order(:created_at)
     regs.each do |reg|
