@@ -21,7 +21,8 @@ Rails.application.routes.draw do
   get '/request', to: 'application#request'
   get '/account', to: 'application#account'
   get '/types', to: 'application#types'
-  get '/residues_lack', to: 'application#residues_lack'
+  get '/often', to: 'application#often'
+  get '/percent', to: 'application#percent'
   
   post '/generate_types', to: 'application#generate_types'
 end

@@ -1,0 +1,44 @@
+<h1>Residuos Divididos por Tipos</h1>
+
+<% @collection = Collection.last %>
+<table>
+  <thead>
+    <tr>
+      <th>Total de Resíduos Acumulados por Tipo</th>
+      <tr>
+          <th>Tipo</th>
+          <th>Peso</th>
+          <th colspan="3"></th>
+        </tr>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @collection.type_residue_percent %>
+    <tr>
+      <td>Sólido Orgânico</td>
+      <td><%= @collection.solido_organico_percent %></td>
+    </tr>
+    <tr>
+      <td>Sólido Inorgânico</td>
+      <td><%= @collection.solido_inorganico_percent %></td>
+    </tr>
+    <tr>
+      <td>Líquido Orgânico</td>
+      <td><%= @collection.liquido_organico_percent %></td>
+    </tr>
+    <tr>
+      <td>Líquido Inorgânico</td>
+      <td><%= @collection.liquido_inorganico_percent %></td>
+    </tr>
+    <tr>
+      <td>Líquido Inflamável</td>
+      <td><%= @collection.liquido_inflamavel_percent %></td>
+    </tr>
+    <tr>
+    <td>Outros</td>
+      <td><%= @collection.outros_percent %></td>
+    </tr>
+  </tbody>
+</table>
+<br>

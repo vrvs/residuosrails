@@ -9,6 +9,7 @@
           <th>Peso</th>
           <th>Laboratorio</th>
           <th>Departamento</th>
+          <th>Registros</th>
           <th colspan="3"></th>
         </tr>
     </tr>
@@ -23,6 +24,7 @@
           <td><%= residue.weight %></td>
           <td><%= Laboratory.find(residue.laboratory_id).name%></td>
           <td><%= Department.find(residue.laboratory_id).name %></td>
+          <td><%= residue.number_registers %></td>
         </tr>
       <% end %>
     <% else %>
@@ -39,7 +41,7 @@
     <form name='form1'>
       <input onclick='input()' type='button' value='Gerar Previsão de Notificação de Coleta' id='button'><br>
       <input onclick='input()' type='button' value='Gerar Total de Resíduos Acumulados por Tipo' id='button'><br>
-      <textarea name='area' rows="1" cols="50">
+      <textarea name='area' rows="1" cols="50" readonly>
       </textarea>
     </form>
   <% else %>

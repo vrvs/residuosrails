@@ -97,6 +97,12 @@ When(/^eu tento gerar o "([^"]*)"$/) do |action|
  if action == "Total de Resíduos Acumulados por Tipo"
   @collection = Collection.last
   @collection.type_residue
+ elsif action == "Total de Resíduos Acumulados por Tipo em Porcentagem"
+  @collection = Collection.last
+  @collection.type_residue_percent
+ elsif action == "Resíduo Mais Frequentemente Cadastrado por Laboratorio"
+  @collection = Collection.last
+  @collection.residue_often_registered
  end
 end
 
@@ -106,7 +112,6 @@ Then(/^o sistema calcula o  "([^"]*)" com "([^"]*)" kg de substâncias de tipo "
   validate(res_type2, res_weight2)
  end
 end
-
 
 def validate(res_type, res_weight)
  case res_type
@@ -204,4 +209,82 @@ def cad_reg_gui(weight, res_name)
   fill_in('register_weight', :with => weight)
   page.select res_name, :from => 'register_residue_id'
   click_button 'Create Register'
+end
+
+Then(/^o sistema calcula o  "([^"]*)" com "([^"]*)"% de substâncias de tipo "([^"]*)" e "([^"]*)"% de substâncias de tipo "([^"]*)"$/) do |action, res_percent1, res_type1, res_percent2, res_type2|
+ if action == "Total de Resíduos Acumulados por Tipo em Porcentagem"
+  validate_percent(res_type1, res_percent1)
+  validate_percent(res_type2, res_percent2)
+ end
+end
+
+def validate_percent(res_type, res_percent)
+ case res_type
+ when "Sólido Orgânico"
+  expect(@collection.solido_organico_percent).to eq(res_percent.to_f())
+ when "Sólido Inorgânico"
+  expect(@collection.solido_inorganico_percent).to eq(res_percent.to_f())
+ when "Líquido Orgânico"
+  expect(@collection.liquido_organico_percent).to eq(res_percent.to_f())
+ when "Líquido Inorgânico"
+  expect(@collection.liquido_inorganico_percent).to eq(res_percent.to_f())
+ when "Líquido Inflamável"
+  expect(@collection.liquido_inflamavel_percent).to eq(res_percent.to_f())
+ when "Outros"
+  expect(@collection.outros_percent).to eq(res_percent.to_f())
+ end
+end
+
+Given(/^existe "([^"]*)" kg de "([^"]*)" no "([^"]*)" com "([^"]*)" registros$/) do |res_weight, res_name, lab_name, reg_number|
+ if Collection.all.empty?
+  col = cad_col(7500) 
+  expect(col).to_not be nil
+ end
+ if Department.all.empty? 
+  dep = cad_dep("Departamento de Genetica")
+  expect(dep).to_not be nil
+ end
+ dep = Department.find_by(name: "Departamento de Genetica")
+ if Laboratory.find_by(name: lab_name).nil?
+  lab = cad_lab(lab_name, dep.id)
+  expect(lab).to_not be nil
+ end
+ lab = Laboratory.find_by(name: lab_name)
+ res = cad_res(res_name,lab.id,"Líquido Inflamável")
+ expect(res).to_not be nil
+ reg = cad_reg(res_weight.to_f(),res.id)
+ expect(reg).to_not be nil
+ num = reg_number.to_i() - 1
+ while num > 0
+  reg = cad_reg(0,res.id)
+  expect(reg).to_not be nil
+  num -= 1
+ end
+end
+
+Then(/^o sistema calcula o "([^"]*)" com "([^"]*)" para o "([^"]*)" e com "([^"]*)" para o "([^"]*)"$/) do |action, res_name1, lab_name1, res_name2, lab_name2|
+ if action ==  "Resíduo Mais Frequentemente Cadastrado por Laboratorio"
+  expect(@collection.residue_often_registered_list[lab_name1.parameterize.underscore.to_sym]).to eq(res_name1)
+  expect(@collection.residue_often_registered_list[lab_name2.parameterize.underscore.to_sym]).to eq(res_name2)
+ end
+end
+
+Given(/^eu vejo a lista de "([^"]*)"$/) do |list|
+  p find("th", text: list)
+end
+
+Given(/^eu vejo "([^"]*)" kg de "([^"]*)" de tipo "([^"]*)"$/) do |res_weight, res_name, res_type|
+  
+end
+
+Then(/^eu vejo uma lista com o "([^"]*)" com "([^"]*)"% de substâncias de tipo "([^"]*)" e "([^"]*)"% de substâncias de tipo "([^"]*)"$/) do |list, res_percent1, res_type1, res_percent2, res_type2|
+ 
+end
+
+Given(/^eu vejo "([^"]*)" kg de "([^"]*)" no "([^"]*)"$/) do |res_weight, res_name, lab_name|
+ 
+end
+
+Then(/^eu vejo a lista "([^"]*)" com "([^"]*)" para o "([^"]*)" e com "([^"]*)" para o "([^"]*)"$/) do |list, res_name1, res_lab1, res_name2, res_lab2|
+  
 end
