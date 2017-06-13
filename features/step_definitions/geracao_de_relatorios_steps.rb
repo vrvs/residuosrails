@@ -260,8 +260,7 @@
   end
   
   Given(/^eu seleciono a opção "([^"]*)" na lista$/) do |option|
-    page.save_screenshot
-       page.select option, :from => 'report_list'
+    page.select option, :from => 'report_list'
   end
   
   Given(/^no campo data eu vejo "([^"]*)" para início  e "([^"]*)" para final\.$/) do |data_begin, data_final|
