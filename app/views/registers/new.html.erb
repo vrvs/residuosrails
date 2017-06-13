@@ -1,5 +1,29 @@
-<h1>Novo Registro</h1>
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="brand" href="/main_adm"><strong>SGRQ</strong> - Resíduos Químicos</a>
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    <li><a href="/departments/new">Criações</a></li>
+                    <li><a href="/reports/new">Relatórios</a></li>
+                    <li><a href="/statistic">Estatístico</a></li>
+                    <li class="active"><a href="/registers/new">Registro</a></li>
+                    <li><a href="/request">Requisições</a></li>
+                    <li><a href="/account">Perfil</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
 
+<br><br>
+<div class="container">
+<h1>Regristro de Peso</h1>
 <%= render 'form', register: @register %>
-
-<%= link_to 'Voltar', registers_path,class: 'css_btn_class' %>
+<hr>
+</div>

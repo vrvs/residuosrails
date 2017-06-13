@@ -9,9 +9,10 @@
             <a class="brand" href="/main_adm"><strong>SGRQ</strong> - Resíduos Químicos</a>
             <div class="nav-collapse collapse">
                 <ul class="nav">
-                    <li class="active"><a href="/creation">Criações</a></li>
+                    <li class="active"><a href="/departments/new">Criações</a></li>
                     <li><a href="/reports/new">Relatórios</a></li>
                     <li><a href="/statistic">Estatístico</a></li>
+                    <li><a href="/registers/new">Registro</a></li>
                     <li><a href="/request">Requisições</a></li>
                     <li><a href="/account">Perfil</a></li>
                 </ul>
@@ -31,31 +32,20 @@
               <li class="nav-header">Tipos:</li>
               <li ><a href='/departments/new'>Departamento</a></li>
               <li><a href='/laboratories/new'>Laboratório</a></li>
-              <li class="active"><a href='/residues/new'>Resíduo</a></li>
-               <li><a href='/collections/new'>Coleta</a></li>
+              <li ><a href='/residues/new'>Resíduo</a></li>
+              <li class="active"><a href='/collections/new'>Coleta</a></li>
             </ul>
           </div><!--/.well -->
         </div><!--/span-->
         <div class="span9">
             <p id="notice"><%= notice %></p>
             <p>
-              <strong>Max value:</strong>
-              <%= @collection.max_value %>
-            </p>
-            <p>
-              <strong>Report:</strong>
-              <%= @collection.report %>
+              <strong>Valor limite: </strong>
+              <%= @collection.max_value %>Kg
             </p>
         </div><!--/span-->
       </div><!--/row-->
 
       <hr>
-
-      <footer>
-        <p>&copy; Company 2017</p>
-      </footer>
-
-        <%= link_to 'Voltar', collections_path,class: 'btn' %>
-        <%= link_to 'Editar', edit_collection_path(@collection),class: 'btn' %> 
     </div><!--/.fluid-container-->
 </div>

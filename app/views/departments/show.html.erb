@@ -12,6 +12,7 @@
                     <li class="active"><a href="/creation">Criações</a></li>
                     <li><a href="/reports/new">Relatórios</a></li>
                     <li><a href="/statistic">Estatístico</a></li>
+                    <li><a href="/registers/new">Registro</a></li>
                     <li><a href="/request">Requisições</a></li>
                     <li><a href="/account">Perfil</a></li>
                 </ul>
@@ -29,9 +30,9 @@
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
               <li class="nav-header">Tipos:</li>
-              <li ><a href='/departments/new'>Departamento</a></li>
+              <li class="active"><a href='/departments/new'>Departamento</a></li>
               <li><a href='/laboratories/new'>Laboratório</a></li>
-              <li class="active"><a href='/residues/new'>Resíduo</a></li>
+              <li><a href='/residues/new'>Resíduo</a></li>
                <li><a href='/collections/new'>Coleta</a></li>
             </ul>
           </div><!--/.well -->
@@ -39,7 +40,7 @@
         <div class="span9">
           <p id="notice"><%= notice %></p>
           <p>
-            <strong>Name:</strong>
+            <strong>Nome:</strong>
             <%= @department.name %>
           </p>
         </div><!--/span-->
@@ -47,12 +48,6 @@
 
       <hr>
 
-      <footer>
-        <p>&copy; Company 2017</p>
-      </footer>
-
-        <%= link_to 'Voltar', departments_path,class: 'btn' %>
-        <%= link_to 'Editar', edit_department_path(@department),class: 'btn' %> 
     </div><!--/.fluid-container-->
 </div>
 
