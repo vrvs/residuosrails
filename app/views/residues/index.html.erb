@@ -28,7 +28,7 @@
         <td><%= Laboratory.find(residue.laboratory_id).name %></td>
         <td><%= (residue.collection_id != nil ? Collection.find(residue.collection_id).id : "SEM COLETA") %></td>
         <td><%= link_to 'Show', residue , class: 'btn'%></td>
-        <td><%= link_to 'Destroy', residue, method: :delete, data: { confirm: 'Are you sure?',class: 'btn' } %></td>
+        <td><%= link_to 'Destroy', residue, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn' %></td>
       </tr>
     <% end %>
   </tbody>
