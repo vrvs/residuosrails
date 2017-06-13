@@ -3,6 +3,9 @@
 <div class = "title">
 <h1>
   <strong>Relatório de </strong>
+  <% if @report.generate_by == 0 %>
+      coleta
+      <%end%>
   <%if @report.generate_by == 1 %>
       departamentos
       <%end%>
