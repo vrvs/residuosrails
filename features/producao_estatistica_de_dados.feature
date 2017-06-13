@@ -44,7 +44,7 @@ Scenario: Gerar Porcentagem de Total de Resíduos Acumulados por Tipo de Resídu
   And existe "300" kg de "Etanol" de tipo "Líquido Inflamável" cadastrado no sistema
   And existe "1200" kg de "Cal" de tipo "Sólido Inorgânico" cadastrado no sistema
   When eu tento gerar o "Total de Resíduos Acumulados por Tipo em Porcentagem"
-  Then o sistema calcula o  "Total de Resíduos Acumulados por Tipo em Porcentagem" com "47.8"% de substâncias de tipo "Líquido Inflamável" e "52.2"% de substâncias de tipo "Sólido Inorgânico"
+  Then o sistema calcula o  "Total de Resíduos Acumulados por Tipo em Porcentagem" com "47.83"% de substâncias de tipo "Líquido Inflamável" e "52.17"% de substâncias de tipo "Sólido Inorgânico"
    
 @b6
 Scenario: Gerar Dados Sobre o Resíduo Mais Frequentemente Cadastrado por Laboratorio baseado em resíduos cadastrados
@@ -64,7 +64,7 @@ Scenario: Gerar Poorcentagem de Total de Resíduos Acumulados por Tipo de Resíd
   And eu vejo "300" kg de "Etanol" de tipo "Líquido Inflamável"
   And eu vejo "1200" kg de "Cal" de tipo "Sólido Inorgânico"
   When eu seleciono a opção "Gerar Total de Resíduos Acumulados por Tipo em Porcentagem"
-  Then eu vejo uma lista com o "Total de Resíduos Acumulados por Tipo em Porcentagem" com "47.8"% de substâncias de tipo "Líquido Inflamável" e "52.2"% de substâncias de tipo "Sólido Inorgânico"
+  Then eu vejo uma lista com o "Total de Resíduos Acumulados por Tipo em Porcentagem" com "47.83"% de substâncias de tipo "Líquido Inflamável" e "52.17"% de substâncias de tipo "Sólido Inorgânico"
   
 @b8
 Scenario: Gerar Dados Sobre o Resíduo Mais Frequentemente Cadastrado por Laboratorio baseado em resíduos cadastrados, GUI

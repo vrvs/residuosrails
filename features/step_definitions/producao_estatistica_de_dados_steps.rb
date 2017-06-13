@@ -1,12 +1,16 @@
 @collection = []
 Given(/^existe "([^"]*)" kg de residuos cadastrados no sistema$/) do |res_weight|
+ dep_name = "Departamento de Genetica"
+ lab_name = "Laboratorio de Genetica Aplicada"
+ res_name = "Etanol"
+ res_type = "Líquido Inflamável"
  col = cad_col(0)
  expect(col).to_not be nil
- dep = cad_dep("Departamento de Genetica")
+ dep = cad_dep(dep_name)
  expect(dep).to_not be nil
- lab = cad_lab("Laboratorio de Genetica Aplicada", dep.id)
+ lab = cad_lab(lab_name, dep.id)
  expect(lab).to_not be nil
- res = cad_res("Etanol",lab.id,"Líquido Inflamável")
+ res = cad_res(res_name,lab.id,res_type)
  expect(res).to_not be nil
  reg = cad_reg(res_weight.to_f(),res.id)
  expect(reg).to_not be nil
@@ -74,19 +78,22 @@ def cad_reg(weight, res_id)
 end
 
 Given(/^existe "([^"]*)" kg de "([^"]*)" de tipo "([^"]*)" cadastrado no sistema$/) do |res_weight, res_name, res_type|
+ dep_name = "Departamento de Genetica"
+ lab_name = "Laboratorio de Genetica Aplicada"
+ limit_weight = 7500
  if Collection.all.empty?
-  col = cad_col(7500) 
+  col = cad_col(limit_weight) 
   expect(col).to_not be nil
  end
  if Department.all.empty? 
-  dep = cad_dep("Departamento de Genetica")
+  dep = cad_dep(dep_name)
   expect(dep).to_not be nil
  end
  if Laboratory.all.empty?
-  lab = cad_lab("Laboratorio de Genetica Aplicada", dep.id)
+  lab = cad_lab(lab_name, dep.id)
   expect(lab).to_not be nil
  end
- lab = Laboratory.find_by(name: "Laboratorio de Genetica Aplicada")
+ lab = Laboratory.find_by(name: lab_name)
  res = cad_res(res_name,lab.id,res_type)
  expect(res).to_not be nil
  reg = cad_reg(res_weight.to_f(),res.id)
@@ -157,19 +164,22 @@ Given(/^eu vejo a lista de "([^"]*)" vazia$/) do |list|
  end
  
  Given(/^eu vejo "([^"]*)" kg de "([^"]*)" de tipo "([^"]*)"$/) do |res_weight, res_name, res_type|
+  dep_name = "Departamento de Filosofia"
+  lab_name = "Laboratorio de Logica"
+  limit_weight = 7500
   visit 'collections'
   if find("table").find("tbody").has_no_css?("tr")
-   cad_col_gui(7500)
+   cad_col_gui(limit_weight)
   end
   visit 'departments'
   if find("table").find("tbody").has_no_css?("tr")
-   cad_dep_gui("Departamento de Filosofia")
+   cad_dep_gui(dep_name)
   end
   visit 'laboratories'
   if find("table").find("tbody").has_no_css?("tr")
-   cad_lab_gui("Laboratorio de Logica","Departamento de Filosofia")
+   cad_lab_gui(lab_name,dep_name)
   end
-  cad_res_gui(res_name,"Laboratorio de Logica",res_type)
+  cad_res_gui(res_name,lab_name,res_type)
   cad_reg_gui(res_weight,res_name)
   visit 'statistic'
   expect(page).to have_content res_name+" "+res_type+" "+res_weight
@@ -242,21 +252,24 @@ def validate_percent(res_type, res_percent)
 end
 
 Given(/^existe "([^"]*)" kg de "([^"]*)" no "([^"]*)" com "([^"]*)" registros$/) do |res_weight, res_name, lab_name, reg_number|
+ dep_name = "Departamento de Genetica"
+ res_type = "Líquido Inflamável"
+ limit_weight = 7500
  if Collection.all.empty?
-  col = cad_col(7500) 
+  col = cad_col(limit_weight) 
   expect(col).to_not be nil
  end
  if Department.all.empty? 
-  dep = cad_dep("Departamento de Genetica")
+  dep = cad_dep(dep_name)
   expect(dep).to_not be nil
  end
- dep = Department.find_by(name: "Departamento de Genetica")
+ dep = Department.find_by(name: dep_name)
  if Laboratory.find_by(name: lab_name).nil?
   lab = cad_lab(lab_name, dep.id)
   expect(lab).to_not be nil
  end
  lab = Laboratory.find_by(name: lab_name)
- res = cad_res(res_name,lab.id,"Líquido Inflamável")
+ res = cad_res(res_name,lab.id,res_type)
  expect(res).to_not be nil
  reg = cad_reg(res_weight.to_f(),res.id)
  expect(reg).to_not be nil
@@ -276,26 +289,29 @@ Then(/^o sistema calcula o "([^"]*)" com "([^"]*)" para o "([^"]*)" e com "([^"]
 end
 
 Then(/^eu vejo uma lista com o "([^"]*)" com "([^"]*)"% de substâncias de tipo "([^"]*)" e "([^"]*)"% de substâncias de tipo "([^"]*)"$/) do |list, res_percent1, res_type1, res_percent2, res_type2|
- if list ==  "Total de Resíduos Acumulados por Tipo em Porcentagem"
-  expect(page).to have_content res_type1+" "+res_percent1+"%"
-  expect(page).to have_content res_type2+" "+res_percent2+"%"
- end
+ element = find("th", text: "Total de Resíduos Acumulados por Tipo em Porcentagem")
+ expect(element.text).to eq(list)
+ expect(page).to have_content res_type1+" "+res_percent1+"%"
+ expect(page).to have_content res_type2+" "+res_percent2+"%"
 end
 
 Given(/^eu vejo "([^"]*)" kg de "([^"]*)" no "([^"]*)" com "([^"]*)" registros$/) do |res_weight, res_name, lab_name, reg_number|
+ dep_name = "Departamento de Filosofia"
+ res_type = "Líquido Inflamável"
+ limit_weight = 7500
   visit 'collections'
   if find("table").find("tbody").has_no_css?("tr")
-   cad_col_gui(7500)
+   cad_col_gui(limit_weight)
   end
   visit 'departments'
   if find("table").find("tbody").has_no_css?("tr")
-   cad_dep_gui("Departamento de Filosofia")
+   cad_dep_gui(dep_name)
   end
   visit 'laboratories'
   if find("table").find("tbody").has_no_css?("tr") or find("table").find("tbody").has_no_css?("td", text: lab_name)
-   cad_lab_gui(lab_name,"Departamento de Filosofia")
+   cad_lab_gui(lab_name,dep_name)
   end
-  cad_res_gui(res_name,lab_name,"Líquido Inflamável")
+  cad_res_gui(res_name,lab_name,res_type)
   cad_reg_gui(res_weight,res_name)
   num = reg_number.to_i() - 1
   while num > 0
@@ -304,12 +320,11 @@ Given(/^eu vejo "([^"]*)" kg de "([^"]*)" no "([^"]*)" com "([^"]*)" registros$/
    num -= 1
   end
   visit 'statistic'
-  page.save_screenshot()
 end
 
 Then(/^eu vejo a lista "([^"]*)" com "([^"]*)" para o "([^"]*)" e com "([^"]*)" para o "([^"]*)"$/) do |list, res_name1, lab_name1, res_name2, lab_name2|
- if list ==  "Resíduo Mais Frequentemente Cadastrado por Laboratorio"
-  expect(page).to have_content lab_name1+" "+res_name1
-  expect(page).to have_content lab_name2+" "+res_name2
- end
+ element = find("th", text: "Resíduo Mais Frequentemente Cadastrado por Laboratorio")
+ expect(element.text).to eq(list)
+ expect(page).to have_content lab_name1+" "+res_name1
+ expect(page).to have_content lab_name2+" "+res_name2
 end

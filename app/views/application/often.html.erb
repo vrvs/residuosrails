@@ -15,8 +15,10 @@
   <tbody>
     <% @collection.residue_often_registered %>
     <% Laboratory.all.each do |laboratory| %>
+      <tr>
         <td><%= laboratory.name %></td>
         <td><%= @collection.residue_often_registered_list[laboratory.name.parameterize.underscore.to_sym] %></td/>
+      </tr>
     <% end %>
   </tbody>
 </table>

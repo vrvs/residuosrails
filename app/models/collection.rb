@@ -34,7 +34,7 @@ class Collection < ApplicationRecord
     return miss_weight
   end
   
-  def calc_miss_days()
+  def calc_miss_days
     miss_days = @miss_weight/@mean
     miss_days = miss_days.ceil
     return miss_days
@@ -68,12 +68,12 @@ class Collection < ApplicationRecord
   def type_residue_percent
     self.type_residue
     weight = self.total_weight
-    @solido_organico_percent = ((@solido_organico/weight)*1000).round/10.0
-    @solido_inorganico_percent = ((@solido_inorganico/weight)*1000).round/10.0
-    @liquido_organico_percent = ((@liquido_organico/weight)*1000).round/10.0
-    @liquido_inorganico_percent = ((@liquido_inorganico/weight)*1000).round/10.0
-    @liquido_inflamavel_percent = ((@liquido_inflamavel/weight)*1000).round/10.0
-    @outros_percent = ((@outros/weight)*1000).round/10.0
+    @solido_organico_percent = ((@solido_organico/weight)*100).round(2)
+    @solido_inorganico_percent = ((@solido_inorganico/weight)*100).round(2)
+    @liquido_organico_percent = ((@liquido_organico/weight)*100).round(2)
+    @liquido_inorganico_percent = ((@liquido_inorganico/weight)*100).round(2)
+    @liquido_inflamavel_percent = ((@liquido_inflamavel/weight)*100).round(2)
+    @outros_percent = ((@outros/weight)*100).round(2)
   end
   
   def residue_often_registered

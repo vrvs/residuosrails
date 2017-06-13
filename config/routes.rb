@@ -23,8 +23,7 @@ Rails.application.routes.draw do
   get '/types', to: 'application#types'
   get '/often', to: 'application#often'
   get '/percent', to: 'application#percent'
-  
-  post '/generate_types', to: 'application#generate_types'
-  post '/generate_types_percent', to: 'application#generate_types_percent'
-  post '/generate_often', to: 'application#generate_often'
+  get '/generate_types', to: 'application#types'
+  get '/generate_types_percent', to: 'application#percent'
+  get '/generate_often', to: 'application#often'
 end

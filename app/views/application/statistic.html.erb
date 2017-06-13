@@ -47,17 +47,11 @@
       </textarea>
     </form>
   <% else %>
-    <%= button_to 'Gerar Previsão de Notificação de Coleta', 'generate_types', method: :post %>
-    <%= button_to 'Gerar Total de Resíduos Acumulados por Tipo', 'generate_types', method: :post %>
-    <%= button_to 'Gerar Total de Resíduos Acumulados por Tipo em Porcentagem', 'generate_types_percent', method: :post %>
-    <%= button_to 'Gerar Resíduo Mais Frequentemente Cadastrado por Laboratorio', 'generate_often', method: :post %>
+    <%= button_to 'Gerar Previsão de Notificação de Coleta', '/types', method: :get %>
+    <%= button_to 'Gerar Total de Resíduos Acumulados por Tipo', '/types', method: :get %>
+    <%= button_to 'Gerar Total de Resíduos Acumulados por Tipo em Porcentagem', '/percent', method: :get %>
+    <%= button_to 'Gerar Resíduo Mais Frequentemente Cadastrado por Laboratorio', '/often', method: :get %>
   <% end %>
-  
 </body>
-<script>
-function input(){
-    var text = "Não existe resíduos cadastrados";
-    document.forms.form1.area.value = text;
-}    
-</script>
+
 
