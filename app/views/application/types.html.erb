@@ -1,9 +1,10 @@
-<h1>Residuos divididos por tipo</h1>
+<h1>Residuos Divididos por Tipos</h1>
 
+<% @collection = Collection.last %>
 <table>
   <thead>
     <tr>
-      <th>Resíduos por Tipo</th>
+      <th>Total de Resíduos Acumulados por Tipo</th>
       <tr>
           <th>Tipo</th>
           <th>Peso</th>
@@ -13,21 +14,31 @@
   </thead>
 
   <tbody>
-    <% if !@residues.empty? %>
-      <% @residues.each do |residue| %>
-        <tr>
-          <td><%= residue.name %></td>
-          <td><%= residue.kind %></td>
-          <td><%= residue.weight %></td>
-          <td><%= Laboratory.find(residue.laboratory_id).name%></td>
-          <td><%= Department.find(residue.laboratory_id).name %></td>
-        </tr>
-      <% end %>
-    <% else %>
-      <tr>
-        <td>Lista vazia</td>
-      <>
-    <% end %>
+    <% @collection.type_residue %>
+    <tr>
+      <td>Sólido Orgânico</td>
+      <td><%= @collection.solido_organico %> kg</td>
+    </tr>
+    <tr>
+      <td>Sólido Inorgânico</td>
+      <td><%= @collection.solido_inorganico %> kg</td>
+    </tr>
+    <tr>
+      <td>Líquido Orgânico</td>
+      <td><%= @collection.liquido_organico %> kg</td>
+    </tr>
+    <tr>
+      <td>Líquido Inorgânico</td>
+      <td><%= @collection.liquido_inorganico %> kg</td>
+    </tr>
+    <tr>
+      <td>Líquido Inflamável</td>
+      <td><%= @collection.liquido_inflamavel %> kg</td>
+    </tr>
+    <tr>
+    <td>Outros</td>
+      <td><%= @collection.outros %> kg</td>
+    </tr>
   </tbody>
 </table>
 <br>

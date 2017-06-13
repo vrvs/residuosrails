@@ -14,5 +14,12 @@ class Residue < ApplicationRecord
     end
     return total
   end
-
+  
+  def number_registers
+    num = 0
+    self.registers.where(created_at: [Collection.last.created_at..Time.now]).each do |register|
+      num += 1
+    end
+    return num
+  end
 end

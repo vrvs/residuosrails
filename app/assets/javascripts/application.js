@@ -13,6 +13,9 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
-//= require_tree .
+//= require_tree 
 
-   
+function input(){
+    var text = "Não existe resíduos cadastrados";
+    document.forms.form1.area.value = text;
+}
