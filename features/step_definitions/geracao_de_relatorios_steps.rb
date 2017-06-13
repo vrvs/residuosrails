@@ -65,7 +65,6 @@
   	modify_date_last_register(res.id,data_begin)
   	res = Residue.where(laboratory_id: lab.id)
     expect(res).to_not be nil
-  	sum_registers(res,data_begin,data_final)
     expect(sum_registers(res,data_begin,data_final)).to eq(res_weight.to_f())
   end
   
@@ -281,7 +280,7 @@
   
   Then(/^eu devo visualizar "([^"]*)" de resíduos produzidos, associado a "([^"]*)" entre as datas  "([^"]*)" e  "([^"]*)"$/) do |res_weight, name, data_begin,data_final|
     expect(page).to have_content res_weight 
-    page.save_screenshot
+    
   end
 
   Given(/^que foi feito o cadastro do laboratório de "([^"]*)" com o resíduo "([^"]*)" onde o tipo é "([^"]*)" e a quantidade total é "([^"]*)"Kg$/) do |lab_name, res_name, kind, total|
@@ -370,7 +369,7 @@ end
 Then(/^eu devo visualizar "([^"]*)" na lista com os nomes de resíduos associados a "([^"]*)"$/) do |option, option1|
   expect(page).to have_content option
   expect(page).to have_content option1 
-  page.save_screenshot
+ 
 end
   
   
@@ -437,7 +436,7 @@ end
   
   Then(/^eu devo visualizar uma tabela com os nomes de resíduos associados a coleta$/) do
     expect(page.find('table').visible?).to be true
-    page.save_screenshot
+    
   end
   
   Then(/^eu devo visualizar "([^"]*)" em uma linha da tabela$/) do |option|
@@ -482,7 +481,7 @@ end
     Collection.last
   end
   
-  def modify_date_last_register(res_id, date)
+  def modify_date_last_register(res_id, date)          #Modifica o ultimo registro de um dado residuo, usado nos cenarios de controlador
     reg = Residue.find(res_id).registers.last
     reg.created_at = date.to_date
     reg.save
@@ -522,7 +521,7 @@ end
   end
   
   
-  def put_data_begin_gui(data_begin,data_final)
+  def put_data_begin_gui(data_begin,data_final)                           #coloca as datas nos campos de data na gui
     
     page.select data_begin.cwyear, :from => 'report_begin_dt_1i'
     page.select data_begin.strftime("%B"), :from => 'report_begin_dt_2i'
@@ -534,8 +533,7 @@ end
     
   end
   
-  def heaviest_res(lab_name)
-    
+  def heaviest_res(lab_name)                                #Calcula o residuo de maior registro para comparação
      lab = Laboratory.find_by(name: lab_name)
       expect(lab).to_not be nil
       res = Residue.where(laboratory_id: lab.id)
