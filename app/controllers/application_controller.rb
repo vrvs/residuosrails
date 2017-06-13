@@ -5,4 +5,10 @@ class ApplicationController < ActionController::Base
   def generate_types
     render('types')
   end
+  def generate_types_percent
+    render('percent')
+  end
+  def generate_often
+    render('often')
+  end
 end

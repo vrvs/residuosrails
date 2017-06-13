@@ -63,8 +63,8 @@ Scenario: Gerar Poorcentagem de Total de Resíduos Acumulados por Tipo de Resíd
   And eu vejo "800" kg de "Ácido Acético" de tipo "Líquido Inflamável"
   And eu vejo "300" kg de "Etanol" de tipo "Líquido Inflamável"
   And eu vejo "1200" kg de "Cal" de tipo "Sólido Inorgânico"
-  When eu seleciono a opção "Total de Resíduos Acumulados por Tipo em Porcentagem"
-  Then eu vejo uma lista com o "Total de Resíduos Acumulados por Tipo em Porcentagem" com "47,8"% de substâncias de tipo "Líquido Inflamável" e "52,2"% de substâncias de tipo "Sólido Inorgânico"
+  When eu seleciono a opção "Gerar Total de Resíduos Acumulados por Tipo em Porcentagem"
+  Then eu vejo uma lista com o "Total de Resíduos Acumulados por Tipo em Porcentagem" com "47.8"% de substâncias de tipo "Líquido Inflamável" e "52.2"% de substâncias de tipo "Sólido Inorgânico"
   
 @b8
 Scenario: Gerar Dados Sobre o Resíduo Mais Frequentemente Cadastrado por Laboratorio baseado em resíduos cadastrados, GUI
@@ -75,6 +75,6 @@ Scenario: Gerar Dados Sobre o Resíduo Mais Frequentemente Cadastrado por Labora
   And eu vejo "700" kg de "Álcool" no "Laboratorio de Química Organica" com "5" registros
   And eu vejo "3000" kg de "Bromo" no "Laboratorio de Química Organica" com "2" registros
   And eu vejo "500" kg de "Petróleo" no "Laboratorio de Química Organica" com "3" registros
-  When eu seleciono a opção "Resíduo Mais Frequentemente Cadastrado por Laboratorio"
+  When eu seleciono a opção "Gerar Resíduo Mais Frequentemente Cadastrado por Laboratorio"
   Then eu vejo a lista "Resíduo Mais Frequentemente Cadastrado por Laboratorio" com "Ácido Acetico" para o "Laboratorio de Ciência Forense" e com "Álcool" para o "Laboratorio de Química Organica"
   

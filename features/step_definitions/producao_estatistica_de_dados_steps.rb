@@ -152,7 +152,8 @@ Given(/^eu vejo a lista de "([^"]*)" vazia$/) do |list|
  end
  
  Given(/^eu vejo a lista de "([^"]*)"$/) do |list|
-  p find("th", text: list)
+  element = find("th", text: list)
+  expect(element).to_not be nil
  end
  
  Given(/^eu vejo "([^"]*)" kg de "([^"]*)" de tipo "([^"]*)"$/) do |res_weight, res_name, res_type|
@@ -275,13 +276,40 @@ Then(/^o sistema calcula o "([^"]*)" com "([^"]*)" para o "([^"]*)" e com "([^"]
 end
 
 Then(/^eu vejo uma lista com o "([^"]*)" com "([^"]*)"% de substâncias de tipo "([^"]*)" e "([^"]*)"% de substâncias de tipo "([^"]*)"$/) do |list, res_percent1, res_type1, res_percent2, res_type2|
- 
+ if list ==  "Total de Resíduos Acumulados por Tipo em Porcentagem"
+  expect(page).to have_content res_type1+" "+res_percent1+"%"
+  expect(page).to have_content res_type2+" "+res_percent2+"%"
+ end
 end
 
-Given(/^eu vejo "([^"]*)" kg de "([^"]*)" no "([^"]*)"$/) do |res_weight, res_name, lab_name|
- 
+Given(/^eu vejo "([^"]*)" kg de "([^"]*)" no "([^"]*)" com "([^"]*)" registros$/) do |res_weight, res_name, lab_name, reg_number|
+  visit 'collections'
+  if find("table").find("tbody").has_no_css?("tr")
+   cad_col_gui(7500)
+  end
+  visit 'departments'
+  if find("table").find("tbody").has_no_css?("tr")
+   cad_dep_gui("Departamento de Filosofia")
+  end
+  visit 'laboratories'
+  if find("table").find("tbody").has_no_css?("tr") or find("table").find("tbody").has_no_css?("td", text: lab_name)
+   cad_lab_gui(lab_name,"Departamento de Filosofia")
+  end
+  cad_res_gui(res_name,lab_name,"Líquido Inflamável")
+  cad_reg_gui(res_weight,res_name)
+  num = reg_number.to_i() - 1
+  while num > 0
+   reg = cad_reg_gui(0,res_name)
+   expect(reg).to_not be nil
+   num -= 1
+  end
+  visit 'statistic'
+  page.save_screenshot()
 end
 
-Then(/^eu vejo a lista "([^"]*)" com "([^"]*)" para o "([^"]*)" e com "([^"]*)" para o "([^"]*)"$/) do |list, res_name1, res_lab1, res_name2, res_lab2|
-  
+Then(/^eu vejo a lista "([^"]*)" com "([^"]*)" para o "([^"]*)" e com "([^"]*)" para o "([^"]*)"$/) do |list, res_name1, lab_name1, res_name2, lab_name2|
+ if list ==  "Resíduo Mais Frequentemente Cadastrado por Laboratorio"
+  expect(page).to have_content lab_name1+" "+res_name1
+  expect(page).to have_content lab_name2+" "+res_name2
+ end
 end

@@ -23,7 +23,7 @@
           <td><%= residue.kind %></td>
           <td><%= residue.weight %></td>
           <td><%= Laboratory.find(residue.laboratory_id).name%></td>
-          <td><%= Department.find(residue.laboratory_id).name %></td>
+          <td><%= Department.find(Laboratory.find(residue.laboratory_id).department_id).name %></td>
           <td><%= residue.number_registers %></td>
         </tr>
       <% end %>
@@ -35,18 +35,22 @@
   </tbody>
 </table>
 <br>
-
 <body>
   <% if Residue.all.empty? %>
     <form name='form1'>
+      
       <input onclick='input()' type='button' value='Gerar Previsão de Notificação de Coleta' id='button'><br>
       <input onclick='input()' type='button' value='Gerar Total de Resíduos Acumulados por Tipo' id='button'><br>
+      <input onclick='input()' type='button' value='Gerar Total de Resíduos Acumulados por Tipo em Porcentagem' id='button'><br>
+      <input onclick='input()' type='button' value='Gerar Resíduo Mais Frequentemente Cadastrado por Laboratorio' id='button'><br>
       <textarea name='area' rows="1" cols="50" readonly>
       </textarea>
     </form>
   <% else %>
     <%= button_to 'Gerar Previsão de Notificação de Coleta', 'generate_types', method: :post %>
     <%= button_to 'Gerar Total de Resíduos Acumulados por Tipo', 'generate_types', method: :post %>
+    <%= button_to 'Gerar Total de Resíduos Acumulados por Tipo em Porcentagem', 'generate_types_percent', method: :post %>
+    <%= button_to 'Gerar Resíduo Mais Frequentemente Cadastrado por Laboratorio', 'generate_often', method: :post %>
   <% end %>
   
 </body>

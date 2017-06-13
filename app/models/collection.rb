@@ -7,7 +7,7 @@ class Collection < ApplicationRecord
   
   attr_accessor :mean, :miss_days, :miss_weight, :solido_organico, :solido_inorganico, :liquido_organico, :liquido_inorganico, :liquido_inflamavel, :outros
   attr_accessor :solido_organico_percent, :solido_inorganico_percent, :liquido_organico_percent, :liquido_inorganico_percent, :liquido_inflamavel_percent, :outros_percent
-  attr_accessor :residue_often_registered_list, :residue_often_registered_weight
+  attr_accessor :residue_often_registered_list, :residue_often_registered_number
   
   def generate_prediction
     collection = Collection.last
@@ -66,11 +66,11 @@ class Collection < ApplicationRecord
   
   def residue_often_registered
     @residue_often_registered_list = Hash.new
-    @residue_often_registered_weight = Hash.new(0)
+    @residue_often_registered_number = Hash.new(0)
     Residue.all.order(:created_at).each do |residue|
       lab = Laboratory.find_by(id: residue.laboratory_id)
-      if residue.number_registers >= @residue_often_registered_weight[lab.name.parameterize.underscore.to_sym]
-        @residue_often_registered_weight[lab.name.parameterize.underscore.to_sym] = residue.number_registers
+      if residue.number_registers >= @residue_often_registered_number[lab.name.parameterize.underscore.to_sym]
+        @residue_often_registered_number[lab.name.parameterize.underscore.to_sym] = residue.number_registers
         @residue_often_registered_list[lab.name.parameterize.underscore.to_sym] = residue.name
       end
     end
