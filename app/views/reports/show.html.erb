@@ -1,22 +1,12 @@
 <p id="notice"><%= notice %></p>
 
-<div class = "title">
 <h1>
   <strong>Relatório de </strong>
-  <% if @report.generate_by == 0 %>
-      coleta
-      <%end%>
-  <%if @report.generate_by == 1 %>
-      departamentos
-      <%end%>
-  <% if @report.generate_by == 2 %>
-   laboratórios
-      <%end%>
-  <% if @report.generate_by == 3 %>
-      resíduos
-      <%end%>
+  <% if @report.generate_by == 0 %>coleta<%end%>
+  <%if @report.generate_by == 1 %>departamentos<%end%>
+  <% if @report.generate_by == 2 %>laboratórios<%end%>
+  <% if @report.generate_by == 3 %>resíduos<%end%>
 </h1>
-</div>
 
 <p>
   <strong>Data inicial:</strong>
@@ -68,5 +58,5 @@
   <p>Somatório total: <%=@report.reportcells.sum(:total)%></p>
 <%end%>
 
-<%= link_to 'Editar', edit_report_path(@report),class: 'css_btn_class' %> |
-<%= link_to 'Voltar', reports_path,class: 'css_btn_class' %>
+<%= link_to 'Editar', edit_report_path(@report) %> | 
+<%= link_to 'Voltar', reports_path %>
