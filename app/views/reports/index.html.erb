@@ -1,17 +1,13 @@
 <p id="notice"><%= notice %></p>
-<div class = "title">
+
 <h1>Histórico de Relatórios</h1>
-</div>
-</end>
 
 <table>
   <thead>
     <tr>
-  
       <th>Gerado por:</th>
       <th>Data inicial:</th>
       <th>Data final:</th>
-
     </tr>
   </thead>
 
@@ -19,6 +15,7 @@
     <% @reports.each do |report| %>
       <tr>
         <td>
+          <% if report.generate_by == 0%>Coleta<%end%>
           <% if report.generate_by == 1%>Departamento<%end%>
           <% if report.generate_by == 2%>Laboratório<%end%>
           <% if report.generate_by == 3%>Resíduo<%end%>
@@ -26,9 +23,9 @@
         <td><%= report.begin_dt %></td>
         <td><%= report.end_dt %></td>
         <td>
-          <%= link_to 'Show', report,  class: 'css_btn_class' %>
-          <%= link_to 'Edit', edit_report_path(report),class: 'css_btn_class' %>
-          <%= link_to 'Destroy', report, method: :delete, data: { confirm: 'Are you sure?' },class: 'css_btn_class' %>
+          <%= link_to 'Show', report %>
+          <%= link_to 'Edit', edit_report_path(report) %>
+          <%= link_to 'Destroy', report, method: :delete, data: { confirm: 'Are you sure?' } %>
         </td>
       </tr>
     <% end %>
