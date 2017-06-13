@@ -249,22 +249,20 @@
   end
   
   Given(/^eu vejo uma lista de "([^"]*)" disponíveis no sistema$/) do |option|
-     
-      if option == "Departamentos" then
-         choice = 'rb1_list'
-      elsif option == "Laboratórios" then
-        choice = 'rb2_list'
-      elsif option == "Resíduos" then
-         choice = 'rb3_list'
+      choice = nil
+      if("Departamentos" == option) then
+        choice = "rb1_list"
+      elsif("Laboratórios" == option) then
+        choice = "rb2_list"
+      elsif("Resíduos" == option) then
+        choice = "rb3_list"
       end
-    
       expect(page.find(:id, choice).visible?).to be true
-      
   end
   
   Given(/^eu seleciono a opção "([^"]*)" na lista$/) do |option|
+    page.save_screenshot
        page.select option, :from => 'report_list'
-       
   end
   
   Given(/^no campo data eu vejo "([^"]*)" para início  e "([^"]*)" para final\.$/) do |data_begin, data_final|
