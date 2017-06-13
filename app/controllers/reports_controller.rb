@@ -83,7 +83,7 @@ class ReportsController < ApplicationController
         format.html { render :new }
         format.json { render json: @report.errors, status: :unprocessable_entity }
       elsif @report.save
-        format.html { redirect_to @report, notice: 'Report was successfully created.' }
+        format.html { redirect_to @report, notice: 'O Relatório foi criado com sucesso!' }
         format.json { render :show, status: :created, location: @report }
         case report_params[:generate_by].to_i
           when 0  #relatório por coleção
