@@ -151,22 +151,27 @@ Given(/^eu vejo a lista de "([^"]*)" vazia$/) do |list|
   #page.save_screenshot()
  end
  
-Given(/^eu vejo a lista de "([^"]*)" com "([^"]*)" kg de "([^"]*)" de tipo "([^"]*)" e "([^"]*)" kg de "([^"]*)" de tipo "([^"]*)" e "([^"]*)" kg de "([^"]*)" de tipo "([^"]*)"$/) do |list, res_weight1, res_name1, res_type1, res_weight2, res_name2, res_type2, res_weight3, res_name3, res_type3|
-  cad_col_gui(7500)
-  cad_dep_gui("Departamento de Genetica")
-  cad_lab_gui("Laboratorio de Genetica Aplicada","Departamento de Genetica")
-  cad_res_gui(res_name1,"Laboratorio de Genetica Aplicada",res_type1)
-  cad_reg_gui(res_weight1,res_name1)
-  cad_res_gui(res_name2,"Laboratorio de Genetica Aplicada",res_type2)
-  cad_reg_gui(res_weight2,res_name2)
-  cad_res_gui(res_name3,"Laboratorio de Genetica Aplicada",res_type3)
-  cad_reg_gui(res_weight3,res_name3)
+ Given(/^eu vejo a lista de "([^"]*)"$/) do |list|
+  p find("th", text: list)
+ end
+ 
+ Given(/^eu vejo "([^"]*)" kg de "([^"]*)" de tipo "([^"]*)"$/) do |res_weight, res_name, res_type|
+  visit 'collections'
+  if find("table").find("tbody").has_no_css?("tr")
+   cad_col_gui(7500)
+  end
+  visit 'departments'
+  if find("table").find("tbody").has_no_css?("tr")
+   cad_dep_gui("Departamento de Filosofia")
+  end
+  visit 'laboratories'
+  if find("table").find("tbody").has_no_css?("tr")
+   cad_lab_gui("Laboratorio de Logica","Departamento de Filosofia")
+  end
+  cad_res_gui(res_name,"Laboratorio de Logica",res_type)
+  cad_reg_gui(res_weight,res_name)
   visit 'statistic'
-  element = find("th", text: list)
-  expect(element.text).to eq(list)
-  expect(page).to have_content res_name1+" "+res_type1+" "+res_weight1
-  expect(page).to have_content res_name2+" "+res_type2+" "+res_weight2
-  expect(page).to have_content res_name3+" "+res_type3+" "+res_weight3
+  expect(page).to have_content res_name+" "+res_type+" "+res_weight
 end
 
 Then(/^eu vejo uma lista com o "([^"]*)" com  "([^"]*)" kg de substâncias de tipo "([^"]*)" e "([^"]*)" kg de substâncias de tipo "([^"]*)"$/) do |list, res_weight1, res_type1, res_weight2, res_type2|
@@ -267,14 +272,6 @@ Then(/^o sistema calcula o "([^"]*)" com "([^"]*)" para o "([^"]*)" e com "([^"]
   expect(@collection.residue_often_registered_list[lab_name1.parameterize.underscore.to_sym]).to eq(res_name1)
   expect(@collection.residue_often_registered_list[lab_name2.parameterize.underscore.to_sym]).to eq(res_name2)
  end
-end
-
-Given(/^eu vejo a lista de "([^"]*)"$/) do |list|
-  p find("th", text: list)
-end
-
-Given(/^eu vejo "([^"]*)" kg de "([^"]*)" de tipo "([^"]*)"$/) do |res_weight, res_name, res_type|
-  
 end
 
 Then(/^eu vejo uma lista com o "([^"]*)" com "([^"]*)"% de substâncias de tipo "([^"]*)" e "([^"]*)"% de substâncias de tipo "([^"]*)"$/) do |list, res_percent1, res_type1, res_percent2, res_type2|
