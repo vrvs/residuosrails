@@ -1,7 +1,8 @@
-  @dep_name = ""
+
   Given(/^o sistema possui o departamento de "([^"]*)" cadastrado$/) do |dep_name|
     dep = create_department({department: {name: dep_name}})
     expect(dep).to_not be nil
+   
   end
   
   Given(/^o sistema possui o laboratório de "([^"]*)" cadastrado no departamento de "([^"]*)"$/) do |lab_name, dep_name|
@@ -9,7 +10,7 @@
     expect(dep).to_not be nil
     lab = create_laboratory({laboratory: {name: lab_name, department_id: dep.id}})
     expect(lab).to_not be nil
-   end 
+  end 
   
   Given(/^o sistema possui "([^"]*)"kg de resíduos cadastrados no laboratório de "([^"]*)"$/) do |res_weight, lab_name|
     lab = Laboratory.find_by(name: lab_name)
@@ -24,7 +25,7 @@
   
   When(/^eu tento produzir o relatório total de resíduos cadastrados entre as datas "([^"]*)" e "([^"]*)" para o departamento de "([^"]*)"$/) do |data_begin, data_final, dep_name|
       @dep_name = dep_name
-    rep = {report: {
+      rep = {report: {
       generate_by: 1, 
       begin_dt: data_begin.to_date, 
       end_dt: data_final.to_date, 
@@ -50,21 +51,20 @@
   end
   
   Given(/^o sistema possui "([^"]*)" kg de resíduos cadastrados entre entre as datas "([^"]*)" e "([^"]*)" para o laboratorio de "([^"]*)"$/) do |res_weight, data_begin, data_final, lab_name|
-      lab = Laboratory.find_by(name: lab_name)
+    lab = Laboratory.find_by(name: lab_name)
   	expect(lab).to_not be nil
   	res = Residue.find_by(name:"Acido", laboratory_id: lab.id)
   	if(res != nil) then
   	  reg =create_register({register: {weight: res_weight.to_f(), residue_id: res.id}})
-    else
-      res = create_residue({residue: {name:"Acido", laboratory_id: lab.id}})
-      reg = create_register({register: {weight: res_weight.to_f(), residue_id: res.id}})
-      modify_date_last_register(res.id,data_begin)
-    end
+      else
+        res = create_residue({residue: {name:"Acido", laboratory_id: lab.id}})
+        reg = create_register({register: {weight: res_weight.to_f(), residue_id: res.id}})
+        modify_date_last_register(res.id,data_begin)
+        end
   	expect(res).to_not be nil
   	modify_date_last_register(res.id,data_begin)
   	res = Residue.where(laboratory_id: lab.id)
     expect(res).to_not be nil
-  	sum_registers(res,data_begin,data_final)
     expect(sum_registers(res,data_begin,data_final)).to eq(res_weight.to_f())
   end
   
@@ -140,38 +140,111 @@
     expect(total).to eq(quant.to_f())
     expect(repc[0].kind).to eq (kind)
   end
+  
+  Given(/^o sistema possui "([^"]*)" kg de "([^"]*)" cadastrados para o laboratorio de "([^"]*)"$/) do |res_weight, res_name, lab_name|
+    
+    lab = Laboratory.find_by(name: lab_name)
+    expect(lab).to_not be nil
+    res = create_residue({residue: {name: res_name, laboratory_id: lab.id}})
+    expect(res).to_not be nil
+    reg = create_register({register: {weight: res_weight.to_f(), residue_id: res.id}})
+    expect(reg).to_not be nil
+    modify_date_last_register(res.id, Time.now.to_date-1)
+    expect(reg.weight).to eq(res_weight.to_f())
+  end
+  
+  When(/^eu tento produzir o relatório para o Laboratório de "([^"]*)"$/) do |lab_name|
+      @lab_name = lab_name
+      rep = {report: {
+      generate_by: 2, 
+      begin_dt: "11/06/2017".to_date, 
+      end_dt: Time.now.to_date+1, 
+      unit: false, 
+      state: false, 
+      kind: false, 
+      onu: false, 
+      blend: false, 
+      code: false, 
+      total: true,
+      list: [lab_name]}
+    }
+    post '/reports', rep
+   
+  end
+  
+  Then(/^o valor retornado pelo sistema será "([^"]*)" kg referente ao Resíduo com maior registro$/) do |res_weight|
+    repc = Reportcell.where(lab_name: @lab_name)
+    total = 0
+    repc.each do |it|
+      if total < it.total then
+        it.total
+        total = it.total
+      end
+    end
+    expect(total.to_f()).to eq(res_weight.to_f())
+    expect(heaviest_res(@lab_name).to_f()).to eq(res_weight.to_f())
+  
+  end
   ##################################################GUI######################################################################
-  @argument = ''
-  Given(/^que estou na página Geração de Relatórios e eu possuo "([^"]*)" kg de resíduos cadastrados entre as datas  "([^"]*)" e  "([^"]*)"$/) do |arg1, arg2,arg3|
-     @argument = arg1
-      dep_name = "Departamento de Engenharia Química"
-      lab_name = "Laboratório de Processos Químicos"
+ 
+  Given(/^eu possuo "([^"]*)" kg de resíduos cadastrados entre as datas  "([^"]*)" e  "([^"]*)"$/) do |res_weight, data_begin,data_final|
+   
+      dep_name = "Engenharia Química"
+      lab_name = "Processos Químicos"
       res_name = "Hidróxido de Amônio"
+      
       create_department_gui(dep_name)
       create_laboratory_gui(lab_name, dep_name)
       create_residue_gui(res_name, lab_name)
-      create_register_gui(arg1.to_f(), res_name)
+      create_register_gui(res_weight.to_f(), res_name)
+      
       lab = Laboratory.find_by(name: lab_name)
       res = Residue.find_by(name: res_name, laboratory_id: lab.id)
-      modify_date_last_register(res, arg2)
+      
+      modify_date_last_register(res, data_begin)
       res_name = "Sulfato de Amônio"
       create_residue_gui(res_name,lab_name)
-      create_register_gui(100.to_f(), res_name)
-    visit '/reports/new'
+      create_register_gui(100.to_f(), res_name)     
   end
   
-  Given(/^a opção de gerar por "([^"]*)" está selecionada$/) do |arg1|
-      if arg1 == "Departamento" then
-        page.choose('rb1')
+  Given(/^que estou na página Geração de Relatórios$/) do
+      visit '/reports/new'
+  end
+  
+  Given(/^a opção de gerar por "([^"]*)" está selecionada$/) do |option|
+      if option == "Coleta" then
+        page.find(:id, 'rb0').trigger('click')
+        choice = 'rb0'
+      elsif option == "Departamento" then
+       page.find(:id, 'rb1').trigger('click')
          choice = 'rb1'
-      elsif arg1 == "Laboratório" then
-        page.choose('rb2')
+      elsif option == "Laboratório" then
+       page.find(:id, 'rb2').trigger('click')
         choice = 'rb2'
-      elsif arg1 == "Resíduo" then
-        page.choose('rb3')
+      elsif option == "Resíduo" then
+        page.find(:id, 'rb3').trigger('click')
          choice = 'rb3'
       end
       expect(find_field(choice)).to be_checked
+     
+  end
+  Given(/^eu seleciono o filtro "([^"]*)"$/) do |option|
+      if option == "total"
+        page.find(:checkbox, 'report_total').trigger('click')
+      elsif option == "codigo"
+       page.find(:checkbox, 'report_code').trigger('click')
+      elsif option == "composição"
+       page.find(:checkbox, 'report_blend').trigger('click')
+      elsif option == "onu"
+       page.find(:checkbox, 'report_onu').trigger('click')
+      elsif option == "tipo"
+        page.find(:checkbox, 'report_kind').trigger('click')
+      elsif option == "estado"
+        page.find(:checkbox, 'report_state').trigger('click')
+      elsif option == "unidade"
+        page.find(:checkbox, 'report_unit').trigger('click')
+      end
+      
   end
   
   Given(/^eu vejo uma lista de "([^"]*)" disponíveis no sistema$/) do |option|
@@ -187,40 +260,27 @@
   end
   
   Given(/^eu seleciono a opção "([^"]*)" na lista$/) do |option|
+    page.save_screenshot
        page.select option, :from => 'report_list'
   end
   
-  Given(/^no campo data eu vejo "([^"]*)" para início  e "([^"]*)" para final\.$/) do |arg1, arg2|
-    d = arg1.to_date
-    ano = d.cwyear
-    page.select ano, :from => 'report_begin_dt_1i'
-    mes = d.strftime("%B")
-    page.select mes, :from => 'report_begin_dt_2i'
-    dia = d.wday
-    page.select dia, :from => 'report_begin_dt_3i'
+  Given(/^no campo data eu vejo "([^"]*)" para início  e "([^"]*)" para final\.$/) do |data_begin, data_final|
+    put_data_begin_gui(data_begin.to_date,data_final.to_date)
     
-    d = arg2.to_date
-    ano = d.cwyear
-    page.select ano, :from => 'report_end_dt_1i'
-    mes = d.strftime("%B")
-    page.select mes, :from => 'report_end_dt_2i'
-    dia = d.wday
-    page.select dia, :from => 'report_end_dt_3i'
   end
   
   When(/^eu peço para Gerar Relatório$/) do 
-    page.find(:checkbox, 'report_total').set(true)
+    
     click_button 'Create Report'
   end
   
   When(/^eu vou para a página de resumo de sistema$/) do
-    visit '/reports'
+     expect(page).to have_content "Relatório de " 
   end
   
-  Then(/^eu devo visualizar a quantidade de resíduos produzidos, associado ao "([^"]*)" entre as datas  "([^"]*)" e  "([^"]*)"$/) do |arg1, arg2, arg3|
-    find(:xpath, "//tr/td/a", :text => 'Show').click
-    expect(page).to have_content @argument 
-    page.save_screenshot
+  Then(/^eu devo visualizar "([^"]*)" de resíduos produzidos, associado a "([^"]*)" entre as datas  "([^"]*)" e  "([^"]*)"$/) do |res_weight, name, data_begin,data_final|
+    expect(page).to have_content res_weight 
+    
   end
 
   Given(/^que foi feito o cadastro do laboratório de "([^"]*)" com o resíduo "([^"]*)" onde o tipo é "([^"]*)" e a quantidade total é "([^"]*)"Kg$/) do |lab_name, res_name, kind, total|
@@ -239,14 +299,6 @@
     #garante que na pagina visitada existe um intervalo minino valido para gerar um laboratorio
     select (Time.now.year()-1), :from => 'report_begin_dt_1i'
     select (Time.now.year()+1), :from => 'report_end_dt_1i'
-  end
-  
-  When(/^eu seleciono o filtro "([^"]*)"$/) do |filter|
-    if filter == 'tipo' then
-      page.find(:checkbox, 'report_kind').trigger("click")
-    elsif filter == 'total'
-      page.find(:checkbox, 'report_total').set(true)
-    end
   end
   
   When(/^peço para criar um novo relátorio$/) do
@@ -302,6 +354,25 @@
     post '/reports', rep
   end
   
+ Given(/^eu possuo "([^"]*)" cadastrado em "([^"]*)"$/) do |option, option1|
+   create_department_gui("Qualquer")
+   create_laboratory_gui(option1,"Qualquer")
+   create_residue_gui(option,option1)
+end 
+
+Given(/^no campo filtros eu não seleciono nenhum filtro$/) do
+ 
+ find(:css, "#report_unit,report_state,report_kind,report_onu,report_blend, report_code,report_total[value='1']").set(false)
+
+end
+
+Then(/^eu devo visualizar "([^"]*)" na lista com os nomes de resíduos associados a "([^"]*)"$/) do |option, option1|
+  expect(page).to have_content option
+  expect(page).to have_content option1 
+ 
+end
+  
+  
   When(/^eu tento produzir um relatório do resíduo "([^"]*)"$/) do |res_name|
     rep = {report: {
       generate_by: 3, 
@@ -351,6 +422,27 @@
     expect(div_error).to have_content "intervalo de data invalido: a data e hora de inicio esta posterior ou iqual a data e hora de final do intervalo requerido."
   end
   
+  Given(/^que possuo uma coleta com limite de peso "([^"]*)"$/) do |col_weight|
+    create_collection_gui(col_weight)
+  end
+  Given(/^eu possuo o resíduo "([^"]*)" associado a coleta$/) do |res_name|
+      dep_name = "Engenharia Química"
+      lab_name = "Processos Químicos"
+      create_department_gui(dep_name)
+      create_laboratory_gui(lab_name, dep_name)
+      create_residue_gui(res_name, lab_name)           #Por padrão um residuo é automaticamente na coleta mais recente
+      create_register_gui(200.to_f(), res_name)
+  end
+  
+  Then(/^eu devo visualizar uma tabela com os nomes de resíduos associados a coleta$/) do
+    expect(page.find('table').visible?).to be true
+    
+  end
+  
+  Then(/^eu devo visualizar "([^"]*)" em uma linha da tabela$/) do |option|
+    expect(page.find('td', text: option).visible?).to be true
+end
+  
 #####################################Funções#############################################################################################  
   
   def sum_registers(res,data_begin,data_final)
@@ -389,7 +481,7 @@
     Collection.last
   end
   
-  def modify_date_last_register(res_id, date)
+  def modify_date_last_register(res_id, date)          #Modifica o ultimo registro de um dado residuo, usado nos cenarios de controlador
     reg = Residue.find(res_id).registers.last
     reg.created_at = date.to_date
     reg.save
@@ -421,4 +513,45 @@
     page.select arg2, :from => 'register_residue_id'
     click_button 'Create Register'
   end
+  
+  def create_collection_gui(arg1)
+    visit '/collections/new'
+    fill_in('collection_max_value', :with => arg1)
+    click_button 'Create Collection'
+  end
+  
+  
+  def put_data_begin_gui(data_begin,data_final)                           #coloca as datas nos campos de data na gui
+    
+    page.select data_begin.cwyear, :from => 'report_begin_dt_1i'
+    page.select data_begin.strftime("%B"), :from => 'report_begin_dt_2i'
+    page.select data_begin.wday, :from => 'report_begin_dt_3i'
+    
+    page.select data_final.cwyear, :from => 'report_end_dt_1i'
+    page.select data_final.strftime("%B"), :from => 'report_end_dt_2i'
+    page.select data_final.wday, :from => 'report_end_dt_3i'
+    
+  end
+  
+  def heaviest_res(lab_name)                                #Calcula o residuo de maior registro para comparação
+     lab = Laboratory.find_by(name: lab_name)
+      expect(lab).to_not be nil
+      res = Residue.where(laboratory_id: lab.id)
+      heaviest = 0
+      res.each do |it|
+        if heaviest < it.registers.sum(:weight) then
+          heaviest = it.registers.sum(:weight)
+         
+        end
+      end
+      heaviest
+  end
+    
+  
+  
+  
+    
+    
+    
+    
   
