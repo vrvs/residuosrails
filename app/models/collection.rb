@@ -10,19 +10,34 @@ class Collection < ApplicationRecord
   attr_accessor :residue_often_registered_list, :residue_often_registered_number
   
   def generate_prediction
-    collection = Collection.last
+    @mean = calc_mean
+    @miss_weight = calc_miss_weight
+    @miss_days = calc_miss_days
+  end
+  
+  def total_weight
     weight = 0.0
     Residue.all.each do |residue|
       weight += residue.weight
     end
-    time = Date.today - collection.created_at.to_date
-    mean = weight/time
-    miss_weight = (collection.max_value - weight)
-    miss_days = miss_weight/mean
+    return weight
+  end
+  
+  def calc_mean
+    time = Date.today - Collection.last.created_at.to_date
+    mean = self.total_weight/time
+    return mean
+  end
+  
+  def calc_miss_weight
+    miss_weight = (Collection.last.max_value - self.total_weight)
+    return miss_weight
+  end
+  
+  def calc_miss_days()
+    miss_days = @miss_weight/@mean
     miss_days = miss_days.ceil
-    @mean=mean
-    @miss_days=miss_days
-    @miss_weight=miss_weight
+    return miss_days
   end
   
   def type_residue
@@ -52,10 +67,7 @@ class Collection < ApplicationRecord
   
   def type_residue_percent
     self.type_residue
-    weight = 0.0
-    Residue.all.each do |residue|
-      weight += residue.weight
-    end
+    weight = self.total_weight
     @solido_organico_percent = ((@solido_organico/weight)*1000).round/10.0
     @solido_inorganico_percent = ((@solido_inorganico/weight)*1000).round/10.0
     @liquido_organico_percent = ((@liquido_organico/weight)*1000).round/10.0
