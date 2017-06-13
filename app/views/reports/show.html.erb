@@ -61,11 +61,9 @@
   </tbody>
 </table>
 
-<table>
-  <thead>
-     <% if @report.total %><tr><p>Somatório total: <%=@report.reportcells.sum(:total)%></p> </tr><%end%>
-  </thead>
-</table>
+<% if @report.total%>
+  <p>Somatório total: <%=@report.reportcells.sum(:total)%></p>
+<%end%>
 
 <%= link_to 'Editar', edit_report_path(@report),class: 'css_btn_class' %> |
 <%= link_to 'Voltar', reports_path,class: 'css_btn_class' %>

@@ -86,9 +86,7 @@ Feature: Geração de Relatórios
   
   @c13
   Scenario: Produzir relatório da coleta corrente (CONTROLLER)
-    Given o sistema possui uma nova coleta com "7500"Kg de limite de peso
-    And o sistema possui o departamento de "Fisiologia e Farmacologia" cadastrado com o resíduo "Hidróxido de Magnésio" com quantidade total de "33"Kg
-    And o sistema possui uma coleta corrente com "7000"Kg de limite de peso
+    Given o sistema possui uma coleta corrente com "7000"Kg de limite de peso
     And o sistema possui o departamento de "Fisiologia e Farmacologia" cadastrado com o resíduo "Hidróxido de Magnésio" com quantidade total de "66"Kg
     And o sistema possui o departamento de "Genética" cadastrado com o resíduo "Acetato de Amônio" com quantidade total de "228"Kg
     When eu tento gerar um relatório da última coleta corrente
@@ -96,31 +94,28 @@ Feature: Geração de Relatórios
     And o sistema retorna o valor de "228"Kg para o resíduo "Acetato de Amônio"
     
   @c14
-  Scenario: Produzir relatório de resíduos, demostração da união de resíduos semelhantes em departamentos diferentes (CONTROLLER)
+  Scenario: Produzir relatório de resíduos, mostrando que residuos iquais em departamentos diferentes geram uma unica linha na tabela (CONTROLLER)
     Given o sistema possui o departamento de "Histologia e Embriologia" cadastrado com o resíduo "Benzoato de Benzila" com quantidade total de "123"Kg
     And o sistema possui o departamento de "Micologia" cadastrado com o resíduo "Benzoato de Benzila" com quantidade total de "234"Kg
     And o sistema possui o departamento de "Zoologia" cadastrado com o resíduo "Benzoato de Benzila" com quantidade total de "345"Kg
     When eu tento produzir um relatório do resíduo "Benzoato de Benzila"
-    Then o sistema retorna o valor de "702"Kg para o resíduo "Benzoato de Benzila"
+    Then o sistema retorna o valor de "702"Kg para o resíduo "Benzoato de Benzila" em uma única célula
     
   @c15
-  Scenario: Produzir relatório de multiplos departamentos (GUI)
+  Scenario: Produzir relatório de multiplos departamentos, isso é, dois ou mais departamentos (GUI)
     Given que foi feito o cadastro do departamento de "Cirurgia" com o resíduo "Iodato de Potássio" e a quantidade total é "32"Kg
     And que foi feito o cadastro do departamento de "Enfermagem" com o resíduo "Álcool Isopropílico" e a quantidade total é "15"Kg
-    And que foi feito o cadastro do departamento de "Fonodiaulogia" com o resíduo "Permanganato de Potássio" e a quantidade total é "65"Kg
     And que estou na página de Geração de Relatórios
     And a opção de gerar por "Departamento" está selecionada
     And eu vejo uma lista de "Departamentos" disponíveis no sistema
     When eu seleciono a opção "Cirurgia" na lista
     And eu seleciono a opção "Enfermagem" na lista
-    And eu seleciono a opção "Fonodiaulogia" na lista
     And eu seleciono o filtro "total"
     And peço para criar um novo relátorio
     Then sou redirecionado para a página do relatório de "departamentos"
     And vejo uma tabela com os dados sobre os departamento contendo nome do departamento, nome do residuo e quantidade total do resíduo
     And vejo em uma coluna o nome do departamento com "Cirurgia", o nome do residuo com "Iodato de Potássio" e a quantidade total com "32"Kg.
     And vejo em uma coluna o nome do departamento com "Enfermagem", o nome do residuo com "Álcool Isopropílico" e a quantidade total com "15"Kg.
-    And vejo em uma coluna o nome do departamento com "Fonodiaulogia", o nome do residuo com "Permanganato de Potássio" e a quantidade total com "65"Kg.
   
   @c16
   Scenario: Produzir relatório com data de inicio posterior a data de fim do intervalo (GUI)
@@ -128,7 +123,7 @@ Feature: Geração de Relatórios
     And que estou na página de Geração de Relatórios
     And a opção de gerar por "Laboratório" está selecionada
     And eu vejo uma lista de "Laboratórios" disponíveis no sistema
-    When eu seleciono a opção "Bioprocessos e Bioprodutos"
+    When eu seleciono a opção "Medicina Tropical" na lista
     And no campo data eu vejo "23/02/2017" para início  e "21/02/2017" para final.
     And peço para criar um novo relátorio
     Then eu vejo uma mensagem de notificação informando que a data e hora do inicio esta posterior ou iqual a data e hora do final do intervalo requerido.
