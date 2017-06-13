@@ -81,9 +81,11 @@ class Collection < ApplicationRecord
     @residue_often_registered_number = Hash.new(0)
     Residue.all.order(:created_at).each do |residue|
       lab = Laboratory.find_by(id: residue.laboratory_id)
-      if residue.number_registers >= @residue_often_registered_number[lab.name.parameterize.underscore.to_sym]
+      if residue.number_registers > @residue_often_registered_number[lab.name.parameterize.underscore.to_sym]
         @residue_often_registered_number[lab.name.parameterize.underscore.to_sym] = residue.number_registers
         @residue_often_registered_list[lab.name.parameterize.underscore.to_sym] = residue.name
+      elsif residue.number_registers == @residue_often_registered_number[lab.name.parameterize.underscore.to_sym]
+        @residue_often_registered_list[lab.name.parameterize.underscore.to_sym] += ", "+residue.name
       end
     end
   end
