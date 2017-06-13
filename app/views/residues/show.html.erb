@@ -9,9 +9,10 @@
             <a class="brand" href="/main_adm"><strong>SGRQ</strong> - Resíduos Químicos</a>
             <div class="nav-collapse collapse">
                 <ul class="nav">
-                    <li class="active"><a href="/creation">Criações</a></li>
+                    <li class="active"><a href="/departments/new">Criações</a></li>
                     <li><a href="/reports/new">Relatórios</a></li>
                     <li><a href="/statistic">Estatístico</a></li>
+                    <li><a href="/registers/new">Registro</a></li>
                     <li><a href="/request">Requisições</a></li>
                     <li><a href="/account">Perfil</a></li>
                 </ul>
@@ -40,50 +41,38 @@
             <p id="notice"><%= notice %></p>
 
           <p>
-            <strong>Name:</strong>
+            <strong>Nome:</strong>
             <%= @residue.name %>
           </p>
           
           <p>
-            <strong>Kind:</strong>
+            <strong>Tipo:</strong>
             <%= @residue.kind %>
           </p>
           
           <p>
-            <strong>Blend:</strong>
+            <strong>Composição:</strong>
             <%= @residue.blend %>
           </p>
           
           <p>
-            <strong>Onu:</strong>
+            <strong>Código ONU:</strong>
             <%= @residue.onu %>
           </p>
           
           <p>
-            <strong>Code:</strong>
+            <strong>Código de Class.:</strong>
             <%= @residue.code %>
           </p>
           
           <p>
-            <strong>Laboratory:</strong>
+            <strong>Laboratório:</strong>
             <%= @residue.laboratory.name %>
-          </p>
-          
-          <p>
-            <strong>Collection:</strong>
-            <%= @residue.collection %>
           </p>
         </div><!--/span-->
       </div><!--/row-->
 
       <hr>
-
-      <footer>
-        <p>&copy; Company 2017</p>
-      </footer>
-
-        <%= link_to 'Voltar', residues_path,class: 'btn' %>
-        <%= link_to 'Editar', edit_residue_path(@residue),class: 'btn' %> 
     </div><!--/.fluid-container-->
 </div>
 

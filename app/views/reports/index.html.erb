@@ -9,8 +9,10 @@
             <a class="brand" href="/main_adm"><strong>SGRQ</strong> - Resíduos Químicos</a>
             <div class="nav-collapse collapse">
                 <ul class="nav">
-                    <li><a href="/statistic">Relatórios</a></li>
-                    <li class="active"><a href="/statistic">Estatístico</a></li>
+                    <li><a href="/departments/new">Criações</a></li>
+                    <li class="active"><a href="/reports/new">Relatórios</a></li>
+                    <li></li><a href="/statistic">Estatístico</a></li>
+                    <li><a href="/registers/new">Registro</a></li>
                     <li><a href="/request">Requisições</a></li>
                     <li><a href="/account">Perfil</a></li>
                 </ul>
@@ -57,4 +59,5 @@
 
 <%= link_to 'Voltar', main_adm_path,class: 'btn' %>
 <%= link_to 'Novo Relatório', new_report_path,class: 'btn' %>
+<hr>
 </div>
