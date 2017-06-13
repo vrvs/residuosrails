@@ -144,8 +144,7 @@ end
 Given(/^eu vejo a lista de "([^"]*)" vazia$/) do |list|
   element = find("th", text: list)
   expect(element).to_not be nil
-  element = find("td", text: "Lista vazia")
-  expect(element).to_not be nil
+  expect(find("table").find("tbody").find("tr").has_no_css?("td")).to be true
  end
 
  When(/^eu seleciono a opção "([^"]*)"$/) do |action|

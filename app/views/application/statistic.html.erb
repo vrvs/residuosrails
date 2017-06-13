@@ -54,7 +54,6 @@
       <% end %>
     <% else %>
       <tr>
-        <td>Lista vazia</td>
       </tr>
     <% end %>
   </tbody>
@@ -64,19 +63,23 @@
   <% if Residue.all.empty? %>
     <form name='form1'>
       
-      <input onclick='input()' type='button' value='Gerar Previsão de Notificação de Coleta' id='button', class: btn><br>
-      <input onclick='input()' type='button' value='Gerar Total de Resíduos Acumulados por Tipo' id='button'><br>
-      <input onclick='input()' type='button' value='Gerar Total de Resíduos Acumulados por Tipo em Porcentagem' id='button'><br>
-      <input onclick='input()' type='button' value='Gerar Resíduo Mais Frequentemente Cadastrado por Laboratorio' id='button'><br>
-      <textarea name='area' rows="1" cols="50" readonly>
-      </textarea>
+      <input onclick='input()' type='button' value='Gerar Previsão de Notificação de Coleta' id='button', class: btn><br><br>
+      <input onclick='input()' type='button' value='Gerar Total de Resíduos Acumulados por Tipo' id='button'><br><br>
+      <input onclick='input()' type='button' value='Gerar Total de Resíduos Acumulados por Tipo em Porcentagem' id='button'><br><br>
+      <input onclick='input()' type='button' value='Gerar Resíduo Mais Frequentemente Cadastrado por Laboratorio' id='button'><br><br>
+      <div><textarea name='area' rows="2" cols="550" readonly></textarea></div>
     </form>
   <% else %>
-    <%= button_to 'Gerar Previsão de Notificação de Coleta', '/types', method: :get %>
+    <%= button_to 'Gerar Previsão de Notificação de Coleta', '/statistic', method: :get %>
     <%= button_to 'Gerar Total de Resíduos Acumulados por Tipo', '/types', method: :get %>
     <%= button_to 'Gerar Total de Resíduos Acumulados por Tipo em Porcentagem', '/percent', method: :get %>
     <%= button_to 'Gerar Resíduo Mais Frequentemente Cadastrado por Laboratorio', '/often', method: :get %>
   <% end %>
 </body>
-
+<script> 
+  function input(){
+    var text = "Não existe resíduos cadastrados";
+    document.forms.form1.area.value = text;
+  }
+</script>
 </div>
